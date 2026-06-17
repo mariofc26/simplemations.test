@@ -575,28 +575,25 @@
 
 .card--featured {
     border: 2px solid var(--c-primary);
-    border-top: none;
-    border-radius: 0 0 var(--r-xl) var(--r-xl);
     box-shadow: var(--shadow-lg);
     overflow: visible;
     position: relative;
-    margin-top: 2rem;
 }
 
 .card--featured::before {
     content: attr(data-badge);
     position: absolute;
-    top: 0;
-    left: -2px;
-    right: -2px;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
     background: var(--c-primary);
     color: #fff;
     font-size: var(--fs-xs);
     font-weight: var(--fw-semi);
     text-align: center;
-    padding: 0.5rem 1rem;
-    border-radius: var(--r-xl) var(--r-xl) 0 0;
-    transform: translateY(-100%);
+    padding: 0.35rem 1rem;
+    border-radius: var(--r-full);
+    white-space: nowrap;
 }
 
 .pricing-card--featured {
@@ -776,13 +773,10 @@
         padding: var(--sp-sm);
     }
 
-    .card--featured {
-        margin-top: 1.5rem;
-    }
-
     .card--featured::before {
         font-size: 0.6rem;
-        padding: 0.35rem 0.7rem;
+        padding: 0.25rem 0.6rem;
+        top: -1.5rem;
     }
 
     .pricing-card__name {
