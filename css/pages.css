@@ -660,6 +660,71 @@
 }
 
 /* ═══════════════════════════════════════════════════
+   STEPS CAROUSEL
+   ═══════════════════════════════════════════════════ */
+
+.steps-carousel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+}
+
+.steps-dots {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .steps-carousel {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: var(--sp-md);
+        padding-bottom: var(--sp-md);
+        margin: 0 calc(-1 * clamp(1.25rem, 4vw, 2.5rem));
+        padding-left: clamp(1.25rem, 4vw, 2.5rem);
+        padding-right: clamp(1.25rem, 4vw, 2.5rem);
+        scrollbar-width: none;
+    }
+
+    .steps-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .steps-carousel > .card {
+        flex: 0 0 72%;
+        scroll-snap-align: center;
+        min-width: 0;
+        padding: var(--sp-md);
+    }
+
+    .steps-carousel > .card .step {
+        padding: var(--sp-sm);
+    }
+
+    .steps-dots {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-top: var(--sp-md);
+    }
+
+    .steps-dots__dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--c-border);
+        transition: background var(--dur-normal), transform var(--dur-normal);
+    }
+
+    .steps-dots__dot.active {
+        background: var(--c-primary);
+        transform: scale(1.3);
+    }
+}
+
+/* ═══════════════════════════════════════════════════
    PRICING CAROUSEL
    ═══════════════════════════════════════════════════ */
 

@@ -271,6 +271,22 @@
     }
 
 
+    function initStepsCarousel() {
+        var carousel = document.querySelector('.steps-carousel');
+        var dots = document.querySelectorAll('.steps-dots__dot');
+        if (!carousel || !dots.length) return;
+
+        carousel.addEventListener('scroll', function() {
+            var scrollLeft = carousel.scrollLeft;
+            var cardWidth = carousel.querySelector('.card').offsetWidth;
+            var gap = parseInt(getComputedStyle(carousel).gap) || 16;
+            var index = Math.round(scrollLeft / (cardWidth + gap));
+            dots.forEach(function(dot, i) {
+                dot.classList.toggle('active', i === index);
+            });
+        });
+    }
+
     function initPricingCarousel() {
         var carousel = document.querySelector('.pricing-carousel');
         var dots = document.querySelectorAll('.pricing-dots__dot');
@@ -301,6 +317,7 @@
         initChatbot();
         initForms();
         initCookieBanner();
+        initStepsCarousel();
         initPricingCarousel();
     }
 
