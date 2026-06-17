@@ -684,33 +684,44 @@
     }
 
     .pricing-carousel > .card {
-        flex: 0 0 75%;
+        flex: 0 0 70%;
         scroll-snap-align: center;
         min-width: 0;
-        padding: var(--sp-md);
+        padding: var(--sp-sm);
     }
 
     .pricing-card {
-        padding: var(--sp-md);
+        padding: var(--sp-sm);
+    }
+
+    .pricing-card__name {
+        font-size: var(--fs-xs);
+        margin-bottom: var(--sp-sm);
     }
 
     .pricing-card__price {
-        font-size: clamp(1.5rem, 5vw, 2rem);
-    }
-
-    .pricing-card__features li {
-        font-size: var(--fs-xs);
-        padding: 0.2rem 0;
-    }
-
-    .pricing-card__features li svg {
-        width: 14px;
-        height: 14px;
+        font-size: 1.5rem;
+        margin-bottom: 2px;
     }
 
     .pricing-card__desc {
-        margin-bottom: var(--sp-md);
-        padding-bottom: var(--sp-md);
+        font-size: var(--fs-xs);
+        margin-bottom: var(--sp-sm);
+        padding-bottom: var(--sp-sm);
+    }
+
+    .pricing-card__features {
+        margin-bottom: var(--sp-sm);
+    }
+
+    .pricing-card__features li {
+        font-size: 0.65rem;
+        padding: 0.15rem 0;
+    }
+
+    .pricing-card__features li svg {
+        width: 12px;
+        height: 12px;
     }
 
     .pricing-carousel > .card.reveal {
