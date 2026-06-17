@@ -1248,19 +1248,17 @@
    ═══════════════════════════════════════════════════ */
 
 @media (max-width: 767px) {
-    /* Hero: ocupa pantalla completa, contenido centrado */
+    /* Hero: contenido pegado arriba sin espacio muerto */
     .hero {
-        min-height: 100svh;
-        min-height: 100vh;
-        padding-top: var(--nav-h);
-        padding-bottom: var(--sp-lg);
-        align-items: center;
+        min-height: auto;
+        padding-top: calc(var(--nav-h) + var(--sp-lg));
+        padding-bottom: var(--sp-xl);
+        align-items: flex-start;
     }
 
     .hero__content {
         display: flex;
         flex-direction: column;
-        justify-content: center;
     }
 
     .hero h1 {
@@ -1288,6 +1286,7 @@
         font-size: 0.6rem;
         padding: 0.25rem 0.6rem;
         margin-bottom: var(--sp-sm);
+        width: fit-content;
     }
 
     /* Secciones generales */
