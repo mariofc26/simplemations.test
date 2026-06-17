@@ -128,9 +128,12 @@
 
         revealObserver = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
             });
-        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+        }, { threshold: 0.01, rootMargin: '0px 0px 100px 0px' });
 
         reveals.forEach(function(el) { revealObserver.observe(el); });
     }
