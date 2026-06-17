@@ -167,10 +167,15 @@
         }
 
         if (chatTooltip) {
-            setTimeout(function() {
+            function hideTooltip() {
                 chatTooltip.style.opacity = '0';
                 setTimeout(function() { chatTooltip.style.display = 'none'; }, 300);
-            }, 7000);
+            }
+            setTimeout(hideTooltip, 7000);
+            window.addEventListener('scroll', function onScroll() {
+                hideTooltip();
+                window.removeEventListener('scroll', onScroll);
+            });
         }
     }
 

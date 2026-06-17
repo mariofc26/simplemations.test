@@ -15,9 +15,18 @@
 
 @media (max-width: 767px) {
     .hero {
-        min-height: auto;
-        padding-top: calc(var(--nav-h) + var(--sp-3xl));
-        padding-bottom: var(--sp-3xl);
+        min-height: 100svh;
+        min-height: 100vh;
+        padding-top: var(--nav-h);
+        padding-bottom: var(--sp-xl);
+        display: flex;
+        align-items: center;
+    }
+
+    .hero__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }
 

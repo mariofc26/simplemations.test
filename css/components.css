@@ -936,6 +936,29 @@ body.page-exit > .footer {
         transition: bottom 0.4s var(--ease-out);
     }
 
+    .chatbot__trigger {
+        width: 44px;
+        height: 44px;
+    }
+
+    .chatbot__trigger svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .chatbot__tooltip {
+        width: 180px;
+        padding: var(--sp-sm) var(--sp-md);
+    }
+
+    .chatbot__tooltip-title {
+        font-size: var(--fs-xs);
+    }
+
+    .chatbot__tooltip-desc {
+        font-size: 0.6rem;
+    }
+
     body.cookie-visible .chatbot {
         bottom: calc(var(--sp-lg) + 80px);
     }
