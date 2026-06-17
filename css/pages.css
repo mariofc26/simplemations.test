@@ -575,9 +575,28 @@
 
 .card--featured {
     border: 2px solid var(--c-primary);
+    border-top: none;
+    border-radius: 0 0 var(--r-xl) var(--r-xl);
     box-shadow: var(--shadow-lg);
-    position: relative;
     overflow: visible;
+    position: relative;
+    margin-top: 2rem;
+}
+
+.card--featured::before {
+    content: attr(data-badge);
+    position: absolute;
+    top: 0;
+    left: -2px;
+    right: -2px;
+    background: var(--c-primary);
+    color: #fff;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semi);
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    transform: translateY(-100%);
 }
 
 .pricing-card--featured {
@@ -585,19 +604,7 @@
 }
 
 .pricing-card__badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--c-primary);
-    color: #fff;
-    font-size: var(--fs-xs);
-    font-weight: var(--fw-semi);
-    padding: 0.3rem 1rem;
-    border-radius: var(--r-full);
-    box-shadow: 0 2px 8px rgba(43, 124, 229, 0.3);
-    white-space: nowrap;
-    z-index: 1;
+    display: none;
 }
 
 .pricing-card__name {
@@ -769,10 +776,13 @@
         padding: var(--sp-sm);
     }
 
-    .pricing-card__badge {
-        top: -11px;
+    .card--featured {
+        margin-top: 1.5rem;
+    }
+
+    .card--featured::before {
         font-size: 0.6rem;
-        padding: 0.2rem 0.7rem;
+        padding: 0.35rem 0.7rem;
     }
 
     .pricing-card__name {
