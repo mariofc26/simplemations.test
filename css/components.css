@@ -469,9 +469,46 @@ select.form-input {
    ═══════════════════════════════════════════════════ */
 
 .footer {
-    background: #EDF2F7;
-    border-top: 1px solid var(--c-border);
+    background: #1A2B42;
+    border-top: none;
     padding: var(--sp-3xl) 0;
+    color: #C8D6E5;
+}
+
+.footer__brand {
+    color: #FFFFFF;
+}
+
+.footer__tagline {
+    color: #8FA3B8;
+}
+
+.footer__col-title {
+    color: #FFFFFF;
+}
+
+.footer__links a {
+    color: #8FA3B8;
+}
+
+.footer__links a:hover {
+    color: #FFFFFF;
+}
+
+.footer__bottom {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.footer__copy {
+    color: #6B8299;
+}
+
+.footer__legal a {
+    color: #6B8299;
+}
+
+.footer__legal a:hover {
+    color: #FFFFFF;
 }
 
 .footer__grid {
