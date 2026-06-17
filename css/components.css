@@ -476,8 +476,13 @@ select.form-input {
 
 .footer__grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--sp-2xl);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--sp-lg);
+    row-gap: var(--sp-xl);
+}
+
+.footer__grid > div:first-child {
+    grid-column: 1 / -1;
 }
 
 .footer__brand {
@@ -510,6 +515,7 @@ select.form-input {
     font-size: var(--fs-sm);
     color: #CBD5E1;
     transition: color var(--dur-normal);
+    overflow-wrap: anywhere;
 }
 
 .footer__links a:hover { color: #FFFFFF; }
@@ -544,7 +550,12 @@ select.form-input {
 .footer__legal a:hover { color: #FFFFFF; }
 
 @media (min-width: 768px) {
-    .footer__grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+    .footer__grid {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: var(--sp-2xl);
+    }
+
+    .footer__grid > div:first-child { grid-column: auto; }
     .footer__bottom { flex-direction: row; justify-content: space-between; text-align: left; }
 }
 
