@@ -229,6 +229,47 @@
     gap: var(--sp-md);
 }
 
+.hero__proof {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    margin-top: var(--sp-xl);
+    padding-top: var(--sp-xl);
+    border-top: 1px solid var(--c-border);
+}
+
+.hero__proof-avatars {
+    display: flex;
+}
+
+.hero__proof-avatars span {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--c-primary-soft);
+    border: 2px solid var(--c-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-weight: var(--fw-bold);
+    color: var(--c-primary);
+    margin-right: -8px;
+}
+
+.hero__proof-avatars span:last-child {
+    margin-right: 0;
+    background: var(--c-primary);
+    color: #fff;
+    font-size: 0.5rem;
+}
+
+.hero__proof p {
+    font-size: var(--fs-xs);
+    color: var(--c-text-2);
+    line-height: var(--lh-snug);
+}
+
 
 /* ═══════════════════════════════════════════════════
    TRUST
@@ -607,6 +648,72 @@
     height: 16px;
     color: var(--c-primary);
     flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   PRICING CAROUSEL
+   ═══════════════════════════════════════════════════ */
+
+.pricing-carousel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+}
+
+.pricing-dots {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .pricing-carousel {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: var(--sp-md);
+        padding-bottom: var(--sp-md);
+        margin: 0 calc(-1 * clamp(1.25rem, 4vw, 2.5rem));
+        padding-left: clamp(1.25rem, 4vw, 2.5rem);
+        padding-right: clamp(1.25rem, 4vw, 2.5rem);
+        scrollbar-width: none;
+    }
+
+    .pricing-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .pricing-carousel > .card {
+        flex: 0 0 75%;
+        scroll-snap-align: center;
+        min-width: 0;
+    }
+
+    .pricing-carousel > .card.reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+    }
+
+    .pricing-dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: var(--sp-md);
+    }
+
+    .pricing-dots__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--c-border);
+        transition: background var(--dur-normal), transform var(--dur-normal);
+    }
+
+    .pricing-dots__dot.active {
+        background: var(--c-primary);
+        transform: scale(1.25);
+    }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1009,3 +1116,93 @@
 
 .chatbot__send:hover { background: var(--c-primary-hover); }
 .chatbot__send svg { width: 14px; height: 14px; color: #fff; }
+
+/* ═══════════════════════════════════════════════════
+   MOBILE PAGE REFINEMENTS
+   ═══════════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+    .hero {
+        padding-top: calc(var(--nav-h) + var(--sp-2xl));
+        padding-bottom: var(--sp-2xl);
+    }
+
+    .hero h1 {
+        font-size: clamp(1.75rem, 7vw, 2.5rem);
+        margin-bottom: var(--sp-md);
+    }
+
+    .hero__subtitle {
+        font-size: var(--fs-base);
+        margin-bottom: var(--sp-xl);
+    }
+
+    .hero__actions {
+        flex-direction: column;
+        gap: var(--sp-sm);
+    }
+
+    .badge {
+        font-size: 0.625rem;
+        padding: 0.3rem 0.75rem;
+    }
+
+    .pain-point {
+        padding: var(--sp-xs);
+    }
+
+    .pain-point h3 {
+        font-size: var(--fs-sm);
+    }
+
+    .step {
+        padding: var(--sp-md);
+    }
+
+    .step__number {
+        width: 36px;
+        height: 36px;
+        font-size: var(--fs-xs);
+        margin-bottom: var(--sp-md);
+    }
+
+    .step h3 {
+        font-size: var(--fs-base);
+    }
+
+    .pricing-card__price {
+        font-size: clamp(1.75rem, 6vw, 2.25rem);
+    }
+
+    .service-hero,
+    .pricing-hero,
+    .contact-hero {
+        padding-top: calc(var(--nav-h) + var(--sp-2xl));
+        padding-bottom: var(--sp-xl);
+    }
+
+    .chatbot__window {
+        width: calc(100vw - 2rem);
+        right: calc(-1 * (100vw - 2rem - 56px));
+        max-width: 340px;
+    }
+
+    .chatbot__tooltip {
+        width: 200px;
+    }
+
+    .guarantee {
+        font-size: var(--fs-xs);
+        padding: 0.5rem 1rem;
+        gap: var(--sp-sm);
+        text-align: left;
+    }
+
+    .comparison {
+        gap: var(--sp-md);
+    }
+
+    .comparison__side {
+        padding: var(--sp-md);
+    }
+}

@@ -239,22 +239,29 @@
 
         var cookieState = localStorage.getItem('cookies-accepted');
         if (!cookieState) {
-            setTimeout(function() { cookieBanner.classList.add('visible'); }, 1500);
+            setTimeout(function() {
+                cookieBanner.classList.add('visible');
+                document.body.classList.add('cookie-visible');
+            }, 1500);
         } else {
             cookieBanner.classList.add('hidden');
+        }
+
+        function hideBanner() {
+            cookieBanner.classList.remove('visible');
+            document.body.classList.remove('cookie-visible');
+            setTimeout(function() { cookieBanner.classList.add('hidden'); }, 400);
         }
 
         var acceptBtn = cookieBanner.querySelector('.cookie-banner__btn--accept');
         var rejectBtn = cookieBanner.querySelector('.cookie-banner__btn--reject');
         if (acceptBtn) acceptBtn.addEventListener('click', function() {
             localStorage.setItem('cookies-accepted', 'true');
-            cookieBanner.classList.remove('visible');
-            setTimeout(function() { cookieBanner.classList.add('hidden'); }, 400);
+            hideBanner();
         });
         if (rejectBtn) rejectBtn.addEventListener('click', function() {
             localStorage.setItem('cookies-accepted', 'rejected');
-            cookieBanner.classList.remove('visible');
-            setTimeout(function() { cookieBanner.classList.add('hidden'); }, 400);
+            hideBanner();
         });
     }
 
@@ -274,6 +281,30 @@
         backBtn.classList.toggle('visible', window.scrollY > 600);
     }
 
+    function initPricingCarousel() {
+        var carousel = document.querySelector('.pricing-carousel');
+        var dots = document.querySelectorAll('.pricing-dots__dot');
+        if (!carousel || !dots.length) return;
+
+        var cards = carousel.querySelectorAll('.card');
+        if (cards.length > 1) {
+            var secondCard = cards[1];
+            var scrollTarget = secondCard.offsetLeft - (carousel.offsetWidth - secondCard.offsetWidth) / 2;
+            carousel.scrollLeft = scrollTarget;
+            dots.forEach(function(dot, i) { dot.classList.toggle('active', i === 1); });
+        }
+
+        carousel.addEventListener('scroll', function() {
+            var scrollLeft = carousel.scrollLeft;
+            var cardWidth = cards[0].offsetWidth;
+            var gap = parseInt(getComputedStyle(carousel).gap) || 16;
+            var index = Math.round(scrollLeft / (cardWidth + gap));
+            dots.forEach(function(dot, i) {
+                dot.classList.toggle('active', i === index);
+            });
+        });
+    }
+
     function initPageContent() {
         initReveal();
         initFaq();
@@ -281,6 +312,7 @@
         initForms();
         initCookieBanner();
         initBackToTop();
+        initPricingCarousel();
     }
 
     bindPersistentNav();
