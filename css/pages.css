@@ -699,6 +699,13 @@
         scroll-snap-align: center;
     }
 
+    .steps-carousel > .card.reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+    }
+
     .steps-carousel > .card .step {
         padding: var(--sp-sm);
     }
