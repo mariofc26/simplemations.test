@@ -1,0 +1,86 @@
+:root {
+    /* Palette — calm blues + warm neutrals */
+    --c-base: #FAFCFF;
+    --c-surface: #FFFFFF;
+    --c-elevated: #F0F6FF;
+    --c-card: #FFFFFF;
+    --c-border: rgba(59, 130, 195, 0.1);
+    --c-border-hover: rgba(59, 130, 195, 0.2);
+    --c-primary: #2B7CE5;
+    --c-primary-hover: #1D6AD4;
+    --c-primary-soft: rgba(43, 124, 229, 0.08);
+    --c-primary-glow: rgba(43, 124, 229, 0.15);
+    --c-secondary: #64B5F6;
+    --c-accent: #0EA5E9;
+    --c-success: #10B981;
+    --c-text: #1A2B42;
+    --c-text-2: #556B82;
+    --c-text-3: #8FA3B8;
+    --c-overlay: rgba(250, 252, 255, 0.9);
+
+    /* Typography */
+    --f-display: 'Plus Jakarta Sans', 'Jakarta Fallback', system-ui, sans-serif;
+    --f-body: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+
+    --fs-xs: 0.6875rem;
+    --fs-sm: 0.8125rem;
+    --fs-base: 0.9375rem;
+    --fs-md: 1.0625rem;
+    --fs-lg: 1.25rem;
+    --fs-xl: clamp(1.5rem, 3vw, 2rem);
+    --fs-2xl: clamp(2rem, 4vw, 2.75rem);
+    --fs-3xl: clamp(2.25rem, 5vw, 3.75rem);
+
+    --fw-normal: 400;
+    --fw-medium: 500;
+    --fw-semi: 600;
+    --fw-bold: 700;
+    --fw-extra: 800;
+
+    --lh-tight: 1.15;
+    --lh-snug: 1.35;
+    --lh-normal: 1.6;
+    --lh-relaxed: 1.75;
+
+    --ls-tight: -0.025em;
+    --ls-normal: 0;
+    --ls-wide: 0.05em;
+
+    /* Spacing */
+    --sp-xs: 0.25rem;
+    --sp-sm: 0.5rem;
+    --sp-md: 1rem;
+    --sp-lg: 1.5rem;
+    --sp-xl: 2rem;
+    --sp-2xl: 3rem;
+    --sp-3xl: 4rem;
+    --sp-4xl: 6rem;
+    --sp-section: clamp(5rem, 10vw, 7rem);
+
+    /* Radius */
+    --r-sm: 6px;
+    --r-md: 10px;
+    --r-lg: 14px;
+    --r-xl: 20px;
+    --r-2xl: 28px;
+    --r-full: 9999px;
+
+    /* Shadows — soft, blue-tinted */
+    --shadow-sm: 0 1px 3px rgba(43, 124, 229, 0.06);
+    --shadow-md: 0 4px 12px rgba(43, 124, 229, 0.08);
+    --shadow-lg: 0 8px 30px rgba(43, 124, 229, 0.1);
+    --shadow-card: 0 2px 16px rgba(43, 124, 229, 0.06), 0 0 1px rgba(43, 124, 229, 0.1);
+    --shadow-float: 0 16px 48px rgba(43, 124, 229, 0.12);
+
+    /* Transitions */
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-fast: 0.15s;
+    --dur-normal: 0.25s;
+    --dur-slow: 0.5s;
+
+    /* Layout */
+    --container: 1120px;
+    --container-sm: 720px;
+    --nav-h: 68px;
+}

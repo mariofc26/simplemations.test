@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simplemations — Automatización inteligente, chatbots y asistentes para tu empresa. Auditoría gratuita incluida siempre.">
+    <meta name="theme-color" content="#2B7CE5">
+    <meta property="og:title" content="Simplemations — Automatización simple para tu empresa">
+    <meta property="og:description" content="Auditoría gratuita, chatbots, asistentes y automatización que funcionan. Sin complicaciones.">
+    <meta property="og:image" content="assets/og-image.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <title>Simplemations — Automatización simple para tu empresa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Jakarta Fallback'; src: local('Arial'); size-adjust: 108%; ascent-override: 90%; descent-override: 22%; line-gap-override: 0%; }
+        @font-face { font-family: 'Inter Fallback'; src: local('Arial'); size-adjust: 107%; ascent-override: 90%; descent-override: 22%; line-gap-override: 0%; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Inter Fallback', system-ui, sans-serif; background: #FAFCFF; }
+        .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 68px; display: flex; align-items: center; background: #FAFCFF; border-bottom: 1px solid rgba(59,130,195,0.1); isolation: isolate; contain: layout style paint; }
+        .nav__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
+        .nav__logo { display: inline-flex; align-items: center; flex: 0 0 auto; width: 166px; height: 32px; font-family: 'Plus Jakarta Sans', 'Jakarta Fallback', system-ui, sans-serif; font-weight: 800; font-size: 1.25rem; line-height: 32px; letter-spacing: -0.025em; color: #1A2B42; text-decoration: none; white-space: nowrap; }
+        .nav__logo span { color: #2B7CE5; }
+        .nav__links { display: none; gap: 3rem; align-items: center; list-style: none; }
+        .nav__links a { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.8125rem; font-weight: 500; color: #556B82; text-decoration: none; transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .nav__links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #2B7CE5; border-radius: 1px; transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav__links a:hover, .nav__links a.active { color: #2B7CE5; }
+        .nav__links a:hover::after { width: 100%; }
+        .nav__links a.active::after { width: 100%; transition: none; }
+        .nav__actions { display: flex; align-items: center; gap: 1rem; }
+        .nav__cta { display: none; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.8125rem; font-weight: 600; color: #fff; background: #2B7CE5; padding: 0.55rem 1.25rem; border-radius: 9999px; text-decoration: none; box-shadow: 0 1px 3px rgba(43, 124, 229, 0.06); }
+        .nav__mobile-toggle { display: flex; flex-direction: column; gap: 5px; padding: 4px; }
+        .nav__mobile-toggle span { display: block; width: 20px; height: 2px; background: #556B82; border-radius: 2px; }
+        @media (min-width: 768px) { .nav__links { display: flex; } .nav__cta { display: inline-flex; } .nav__mobile-toggle { display: none; } }
+    </style>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Simplemations",
+        "description": "Chatbots, asistentes inteligentes y automatización a medida para empresas. Auditoría gratuita incluida siempre.",
+        "url": "https://simplemations.com",
+        "email": "info@simplemations.com",
+        "serviceType": ["Free Automation Audit", "Chatbot Development", "AI Assistant", "Business Process Automation"],
+        "areaServed": "ES",
+        "priceRange": "€€"
+    }
+    </script>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo">Simple<span>mations</span></a>
+            <ul class="nav__links">
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="precios.html">Precios</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="nav__actions">
+                <a href="contacto.html" class="nav__cta">Auditoría gratuita</a>
+                <button class="nav__mobile-toggle" aria-label="Abrir menú">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <button class="mobile-menu__close" aria-label="Cerrar menú">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <a href="index.html">Inicio</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="precios.html">Precios</a>
+        <a href="contacto.html">Contacto</a>
+    </div>
+
+    <!-- HERO — split layout -->
+    <section class="hero hero--split">
+        <div class="container">
+            <div class="hero__grid">
+                <div class="hero__content">
+                    <div class="badge">
+                        <span class="badge__dot"></span>
+                        Auditoría gratuita + automatización
+                    </div>
+
+                    <h1>
+                        Automatización simple para empresas reales.
+                    </h1>
+
+                    <p class="hero__subtitle">
+                        Revisamos gratis tus procesos, detectamos dónde se pierde tiempo o dinero y, si tiene sentido, creamos chatbots, asistentes inteligentes y sistemas automáticos para resolverlo.
+                    </p>
+
+                    <div class="hero__actions">
+                        <a href="contacto.html" class="btn btn--primary">
+                            Pedir auditoría gratuita
+                            <svg class="btn__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                        <a href="servicios.html" class="btn btn--ghost">Cómo funciona →</a>
+                    </div>
+                </div>
+
+                <!-- Visual: Chat mockup animado -->
+                <div class="hero__visual">
+                    <div class="hero-chat">
+                        <div class="hero-chat__header">
+                            <div class="hero-chat__status"></div>
+                            <span>Asistente Simplemations</span>
+                        </div>
+                        <div class="hero-chat__body">
+                            <div class="hero-chat__msg hero-chat__msg--bot">
+                                <p>¡Hola! ¿En qué puedo ayudarte?</p>
+                            </div>
+                            <div class="hero-chat__msg hero-chat__msg--user">
+                                <p>Quiero información sobre vuestros servicios</p>
+                            </div>
+                            <div class="hero-chat__msg hero-chat__msg--bot">
+                                <p>Claro. Primero hacemos una auditoría gratuita para detectar oportunidades reales. Después proponemos chatbots, asistentes o automatizaciones si encajan.</p>
+                            </div>
+                            <div class="hero-chat__typing">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARA QUIÉN -->
+    <section class="section" style="background: var(--c-elevated);">
+        <div class="container">
+            <div class="section-header section-header--center reveal">
+                <span class="section-label">Para quién</span>
+                <h2 class="section-title">Si te suena alguna de estas, podemos ayudarte</h2>
+            </div>
+            <div class="grid grid--2">
+                <div class="card card--flat reveal reveal-d1">
+                    <div class="pain-point">
+                        <span class="pain-point__icon">→</span>
+                        <div>
+                            <h3>Respondes siempre las mismas preguntas</h3>
+                            <p>Tus clientes preguntan lo mismo por email, WhatsApp o web. Un chatbot las resuelve al instante.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card--flat reveal reveal-d2">
+                    <div class="pain-point">
+                        <span class="pain-point__icon">→</span>
+                        <div>
+                            <h3>Pierdes leads por tardar en contestar</h3>
+                            <p>Si tardas horas en responder, muchos se van a la competencia. La automatización responde al segundo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card--flat reveal reveal-d1">
+                    <div class="pain-point">
+                        <span class="pain-point__icon">→</span>
+                        <div>
+                            <h3>Haces cosas manuales que podrían ir solas</h3>
+                            <p>Copiar datos entre herramientas, enviar recordatorios, actualizar hojas de cálculo. Todo eso se puede automatizar.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card--flat reveal reveal-d2">
+                    <div class="pain-point">
+                        <span class="pain-point__icon">→</span>
+                        <div>
+                            <h3>Tu equipo está saturado con tareas repetitivas</h3>
+                            <p>Si tu gente pierde tiempo en operativa que no aporta valor, un asistente IA les libera horas cada día.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header section-header--center reveal">
+                <span class="section-label">Cómo trabajamos</span>
+                <h2 class="section-title">Simple. Como el nombre.</h2>
+                <p class="section-desc">No empezamos vendiéndote una herramienta. Primero miramos dónde tiene sentido automatizar y dónde no.</p>
+            </div>
+            <div class="grid grid--3">
+                <div class="card reveal reveal-d1">
+                    <div class="step">
+                        <div class="step__number">1</div>
+                        <h3>Auditoría gratuita</h3>
+                        <p>Revisamos tu negocio, tus procesos y tus canales para detectar oportunidades reales. Sin coste, sin compromiso y sin presión.</p>
+                    </div>
+                </div>
+                <div class="card reveal reveal-d2">
+                    <div class="step">
+                        <div class="step__number">2</div>
+                        <h3>Detectamos fugas</h3>
+                        <p>Preguntas repetidas, respuestas lentas, datos duplicados, tareas manuales y puntos donde se pierden clientes o tiempo.</p>
+                    </div>
+                </div>
+                <div class="card reveal reveal-d3">
+                    <div class="step">
+                        <div class="step__number">3</div>
+                        <h3>Priorizamos impacto</h3>
+                        <p>Ordenamos las oportunidades por valor real, dificultad y coste. También te decimos qué no merece automatizarse.</p>
+                    </div>
+                </div>
+                <div class="card reveal reveal-d1">
+                    <div class="step">
+                        <div class="step__number">4</div>
+                        <h3>Definimos la solución</h3>
+                        <p>Te planteamos una solución concreta: chatbot, asistente IA, automatización entre herramientas o ninguna si no compensa.</p>
+                    </div>
+                </div>
+                <div class="card reveal reveal-d2">
+                    <div class="step">
+                        <div class="step__number">5</div>
+                        <h3>La montamos y la pruebas</h3>
+                        <p>Construimos el sistema y lo pruebas en tu entorno real antes de comprometerte con una mensualidad.</p>
+                    </div>
+                </div>
+                <div class="card reveal reveal-d3">
+                    <div class="step">
+                        <div class="step__number">6</div>
+                        <h3>Si te convence, seguimos</h3>
+                        <p>Tarifa plana mensual con todo incluido. La auditoría siempre es gratuita; solo pagas si decides poner la solución en marcha.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2.5rem;" class="reveal">
+                <div class="guarantee">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    Auditoría gratuita siempre incluida. Sin coste inicial. Prueba antes de pagar.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FAQ -->
+    <section class="section">
+        <div class="container container--sm">
+            <div class="section-header section-header--center reveal">
+                <span class="section-label">Preguntas Frecuentes</span>
+                <h2 class="section-title">Resolvemos tus dudas</h2>
+            </div>
+            <div class="reveal">
+                <div class="faq-item">
+                    <button class="faq-item__q">¿Necesito conocimientos técnicos?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <div class="faq-item__a"><p>No. Nos encargamos de todo: diseño, instalación, configuración y mantenimiento. Tú solo dices qué necesitas.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__q">¿La auditoría tiene coste?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <div class="faq-item__a"><p>No. La auditoría es gratuita siempre. Revisamos tu caso, detectamos oportunidades y te decimos qué haríamos antes de hablar de mensualidades.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__q">¿Cuánto cuesta si sigo adelante?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <div class="faq-item__a"><p>Depende de lo que necesites. Trabajamos con tarifa plana mensual — sin costes iniciales de desarrollo. Tras la auditoría gratuita te damos un precio cerrado.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__q">¿Qué pasa si no me convence?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <div class="faq-item__a"><p>Sin permanencia. Si el sistema no te aporta valor, lo retiramos y dejas de pagar. Así de simple.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__q">¿En qué se diferencia de un chatbot genérico?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <div class="faq-item__a"><p>Lo hacemos a medida para tu negocio. No es un widget con respuestas predefinidas — entiende tu contexto, tus productos y tus procesos.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__q">¿Para qué tipo de empresas trabajáis?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <div class="faq-item__a"><p>Cualquier empresa que atienda clientes o tenga procesos repetitivos: clínicas, agencias, consultoras, tiendas online, despachos profesionales...</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CTA FINAL -->
+    <section class="section" style="background: var(--c-elevated);">
+        <div class="container" style="text-align: center;">
+            <div class="reveal">
+                <span class="section-label">¿Te interesa?</span>
+                <h2 class="section-title" style="max-width: 560px; margin: 0 auto var(--sp-md);">Cuéntanos qué necesitas y te hacemos una auditoría gratuita.</h2>
+                <p class="section-desc" style="margin: 0 auto var(--sp-2xl);">Revisamos tu caso, priorizamos oportunidades y te decimos qué automatizaríamos antes de que pagues nada.</p>
+                <a href="contacto.html" class="btn btn--primary">
+                    Pedir auditoría gratuita
+                    <svg class="btn__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div>
+                    <p class="footer__brand">Simple<span>mations</span></p>
+                    <p class="footer__tagline">Chatbots, asistentes y automatización para empresas que quieren trabajar mejor.</p>
+                </div>
+                <div>
+                    <p class="footer__col-title">Navegación</p>
+                    <ul class="footer__links">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="servicios.html">Servicios</a></li>
+                        <li><a href="precios.html">Precios</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="footer__col-title">Servicios</p>
+                    <ul class="footer__links">
+                        <li><a href="servicios.html">Auditoría gratuita</a></li>
+                        <li><a href="servicios.html">Chatbots</a></li>
+                        <li><a href="servicios.html">Asistentes IA</a></li>
+                        <li><a href="servicios.html">Automatizaciones</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="footer__col-title">Contacto</p>
+                    <ul class="footer__links">
+                        <li><a href="mailto:info@simplemations.com">info@simplemations.com</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">WhatsApp</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 Simplemations. Todos los derechos reservados.</p>
+                <div class="footer__legal">
+                    <a href="privacidad.html">Privacidad</a>
+                    <a href="aviso-legal.html">Aviso legal</a>
+                    <a href="privacidad.html#cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CHATBOT -->
+    <div class="chatbot">
+        <div class="chatbot__tooltip">
+            <p class="chatbot__tooltip-title">¿Quieres una auditoría?</p>
+            <p class="chatbot__tooltip-desc">Te orientamos antes de que pagues nada.</p>
+        </div>
+        <button class="chatbot__trigger" aria-label="Abrir chat">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </button>
+        <div class="chatbot__window">
+            <div class="chatbot__w-header">
+                <div class="chatbot__w-info">
+                    <div class="chatbot__w-avatar">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <div>
+                        <p class="chatbot__w-name">Asistente Simplemations</p>
+                        <p class="chatbot__w-status">En línea</p>
+                    </div>
+                </div>
+                <button class="chatbot__w-close" aria-label="Cerrar chat">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="chatbot__messages">
+                <div class="chatbot__bubble">¡Hola! Soy el asistente de Simplemations. Podemos empezar por una auditoría gratuita. ¿Qué quieres revisar?</div>
+            </div>
+            <div class="chatbot__input-bar">
+                <input type="text" class="chatbot__input" placeholder="Escribe tu pregunta...">
+                <button class="chatbot__send" aria-label="Enviar">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" aria-label="Volver arriba">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+    </button>
+
+    <!-- COOKIE BANNER -->
+    <div class="cookie-banner">
+        <p class="cookie-banner__text">Usamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas nuestra <a href="#">política de cookies</a>.</p>
+        <div class="cookie-banner__actions">
+            <button class="cookie-banner__btn cookie-banner__btn--reject">Rechazar</button>
+            <button class="cookie-banner__btn cookie-banner__btn--accept">Aceptar</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

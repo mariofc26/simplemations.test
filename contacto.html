@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pide una auditoría gratuita con Simplemations. Cuéntanos qué necesitas y revisamos tus oportunidades de automatización sin compromiso.">
+    <meta name="theme-color" content="#2B7CE5">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <title>Contacto — Simplemations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Jakarta Fallback'; src: local('Arial'); size-adjust: 108%; ascent-override: 90%; descent-override: 22%; line-gap-override: 0%; }
+        @font-face { font-family: 'Inter Fallback'; src: local('Arial'); size-adjust: 107%; ascent-override: 90%; descent-override: 22%; line-gap-override: 0%; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Inter Fallback', system-ui, sans-serif; background: #FAFCFF; }
+        .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 68px; display: flex; align-items: center; background: #FAFCFF; border-bottom: 1px solid rgba(59,130,195,0.1); isolation: isolate; contain: layout style paint; }
+        .nav__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
+        .nav__logo { display: inline-flex; align-items: center; flex: 0 0 auto; width: 166px; height: 32px; font-family: 'Plus Jakarta Sans', 'Jakarta Fallback', system-ui, sans-serif; font-weight: 800; font-size: 1.25rem; line-height: 32px; letter-spacing: -0.025em; color: #1A2B42; text-decoration: none; white-space: nowrap; }
+        .nav__logo span { color: #2B7CE5; }
+        .nav__links { display: none; gap: 3rem; align-items: center; list-style: none; }
+        .nav__links a { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.8125rem; font-weight: 500; color: #556B82; text-decoration: none; transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .nav__links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #2B7CE5; border-radius: 1px; transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav__links a:hover, .nav__links a.active { color: #2B7CE5; }
+        .nav__links a:hover::after { width: 100%; }
+        .nav__links a.active::after { width: 100%; transition: none; }
+        .nav__actions { display: flex; align-items: center; gap: 1rem; }
+        .nav__cta { display: none; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.8125rem; font-weight: 600; color: #fff; background: #2B7CE5; padding: 0.55rem 1.25rem; border-radius: 9999px; text-decoration: none; box-shadow: 0 1px 3px rgba(43, 124, 229, 0.06); }
+        .nav__mobile-toggle { display: flex; flex-direction: column; gap: 5px; padding: 4px; }
+        .nav__mobile-toggle span { display: block; width: 20px; height: 2px; background: #556B82; border-radius: 2px; }
+        @media (min-width: 768px) { .nav__links { display: flex; } .nav__cta { display: inline-flex; } .nav__mobile-toggle { display: none; } }
+    </style>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo">Simple<span>mations</span></a>
+            <ul class="nav__links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="precios.html">Precios</a></li>
+                <li><a href="contacto.html" class="active">Contacto</a></li>
+            </ul>
+            <div class="nav__actions">
+                <a href="contacto.html" class="nav__cta">Auditoría gratuita</a>
+                <button class="nav__mobile-toggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+    <div class="mobile-menu">
+        <button class="mobile-menu__close" aria-label="Cerrar"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        <a href="index.html">Inicio</a><a href="servicios.html">Servicios</a><a href="precios.html">Precios</a><a href="contacto.html">Contacto</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="contact-hero">
+        <div class="container">
+            <div class="reveal">
+                <span class="section-label">Contacto</span>
+                <h1 class="section-title">Pide tu auditoría gratuita.</h1>
+                <p class="section-desc" style="margin-top: var(--sp-md);">Una conversación rápida para entender tu situación, revisar oportunidades de automatización y decirte si podemos ayudarte. Sin coste, sin presión.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CONTACT -->
+    <section class="section">
+        <div class="container">
+            <div class="grid grid--2">
+                <!-- Form -->
+                <div class="reveal">
+                    <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-xl);">Solicita la auditoría</h2>
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-input" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" placeholder="tu@empresa.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Empresa</label>
+                            <input type="text" class="form-input" placeholder="Nombre de tu empresa">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Qué quieres revisar</label>
+                            <select class="form-input">
+                                <option value="">Selecciona una opción</option>
+                                <option value="atencion-cliente">Atención al cliente o WhatsApp</option>
+                                <option value="tareas-repetitivas">Tareas repetitivas internas</option>
+                                <option value="integraciones">Integraciones entre herramientas</option>
+                                <option value="asistente-ia">Asistente IA para el equipo</option>
+                                <option value="no-se">No lo tengo claro todavía</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cuéntanos más</label>
+                            <textarea class="form-input" placeholder="¿Qué proceso quieres revisar? ¿Qué tarea se repite mucho? ¿Dónde pierdes tiempo, leads o información? Cualquier detalle nos ayuda a preparar la auditoría."></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">Pedir auditoría gratuita</button>
+                        <p class="form-hint">La auditoría no tiene coste. Te respondemos en menos de 24h laborables.</p>
+                    </form>
+                </div>
+
+                <!-- Info -->
+                <div class="reveal reveal-d2">
+                    <!-- Qué esperar -->
+                    <div class="card" style="margin-bottom: var(--sp-2xl);">
+                        <h3 style="font-size: var(--fs-base); margin-bottom: var(--sp-md);">¿Qué pasa después?</h3>
+                        <ul class="feature-list">
+                            <li>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Leemos tu mensaje y preparamos la auditoría gratuita
+                            </li>
+                            <li>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Te proponemos una llamada corta para entender procesos, herramientas y prioridades
+                            </li>
+                            <li>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Te damos un mapa de oportunidades y un precio cerrado solo si decides implementar
+                            </li>
+                            <li>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Si no vemos una mejora clara, te lo decimos directamente
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact info -->
+                    <div class="contact-info">
+                        <div class="contact-info__item">
+                            <div class="contact-info__icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div>
+                                <p class="contact-info__label">Email directo</p>
+                                <p class="contact-info__value">info@simplemations.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-info__item">
+                            <div class="contact-info__icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                                <p class="contact-info__label">Tiempo de respuesta</p>
+                                <p class="contact-info__value">Menos de 24h en día laborable</p>
+                            </div>
+                        </div>
+                        <div class="contact-info__item">
+                            <div class="contact-info__icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </div>
+                            <div>
+                                <p class="contact-info__label">Ubicación</p>
+                                <p class="contact-info__value">100% remoto — trabajamos con empresas de toda España</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div>
+                    <p class="footer__brand">Simple<span>mations</span></p>
+                    <p class="footer__tagline">Chatbots, asistentes y automatización para empresas que quieren trabajar mejor.</p>
+                </div>
+                <div>
+                    <p class="footer__col-title">Navegación</p>
+                    <ul class="footer__links">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="servicios.html">Servicios</a></li>
+                        <li><a href="precios.html">Precios</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="footer__col-title">Servicios</p>
+                    <ul class="footer__links">
+                        <li><a href="servicios.html">Auditoría gratuita</a></li>
+                        <li><a href="servicios.html">Chatbots</a></li>
+                        <li><a href="servicios.html">Asistentes IA</a></li>
+                        <li><a href="servicios.html">Automatizaciones</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="footer__col-title">Contacto</p>
+                    <ul class="footer__links">
+                        <li><a href="mailto:info@simplemations.com">info@simplemations.com</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">WhatsApp</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">© 2026 Simplemations. Todos los derechos reservados.</p>
+                <div class="footer__legal">
+                    <a href="privacidad.html">Privacidad</a>
+                    <a href="aviso-legal.html">Aviso legal</a>
+                    <a href="privacidad.html#cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CHATBOT -->
+    <div class="chatbot">
+        <button class="chatbot__trigger" aria-label="Abrir chat">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </button>
+        <div class="chatbot__window">
+            <div class="chatbot__w-header">
+                <div class="chatbot__w-info">
+                    <div class="chatbot__w-avatar"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+                    <div>
+                        <p class="chatbot__w-name">Asistente Simplemations</p>
+                        <p class="chatbot__w-status">En línea</p>
+                    </div>
+                </div>
+                <button class="chatbot__w-close" aria-label="Cerrar"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="chatbot__messages"><div class="chatbot__bubble">¿Prefieres preguntar algo antes de pedir la auditoría gratuita? Estoy aquí para ayudarte.</div></div>
+            <div class="chatbot__input-bar">
+                <input type="text" class="chatbot__input" placeholder="Escribe tu pregunta...">
+                <button class="chatbot__send" aria-label="Enviar"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COOKIE BANNER -->
+    <div class="cookie-banner">
+        <p class="cookie-banner__text">Usamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas nuestra <a href="#">política de cookies</a>.</p>
+        <div class="cookie-banner__actions">
+            <button class="cookie-banner__btn cookie-banner__btn--reject">Rechazar</button>
+            <button class="cookie-banner__btn cookie-banner__btn--accept">Aceptar</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
