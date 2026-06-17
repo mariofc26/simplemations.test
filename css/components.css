@@ -574,6 +574,20 @@ select.form-input {
     .badge__dot, .chatbot__trigger { animation: none; }
 }
 
+@media (max-width: 767px) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+        contain: none;
+    }
+
+    .reveal-d1, .reveal-d2, .reveal-d3, .reveal-d4 {
+        transition-delay: 0s;
+    }
+}
+
 /* ═══════════════════════════════════════════════════
    BACK TO TOP
    ═══════════════════════════════════════════════════ */
