@@ -469,7 +469,7 @@ select.form-input {
    ═══════════════════════════════════════════════════ */
 
 .footer {
-    background: var(--c-elevated);
+    background: #EDF2F7;
     border-top: 1px solid var(--c-border);
     padding: var(--sp-3xl) 0;
 }
