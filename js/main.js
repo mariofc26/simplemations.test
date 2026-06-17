@@ -265,21 +265,6 @@
         });
     }
 
-    function initBackToTop() {
-        var backBtn = document.querySelector('.back-to-top');
-        if (backBtn) {
-            backBtn.addEventListener('click', function() {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-        updateBackToTop();
-    }
-
-    function updateBackToTop() {
-        var backBtn = document.querySelector('.back-to-top');
-        if (!backBtn) return;
-        backBtn.classList.toggle('visible', window.scrollY > 600);
-    }
 
     function initPricingCarousel() {
         var carousel = document.querySelector('.pricing-carousel');
@@ -311,7 +296,6 @@
         initChatbot();
         initForms();
         initCookieBanner();
-        initBackToTop();
         initPricingCarousel();
     }
 
@@ -319,5 +303,4 @@
     bindPjaxNavigation();
     updateActiveNav(window.location.href);
     initPageContent();
-    window.addEventListener('scroll', updateBackToTop);
 })();
