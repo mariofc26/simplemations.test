@@ -9,32 +9,12 @@
     <meta property="og:description" content="Auditoría gratuita, chatbots, asistentes y automatización que funcionan. Sin complicaciones.">
     <meta property="og:image" content="assets/og-image.png">
     <meta property="og:type" content="website">
+    <link rel="canonical" href="https://simplemations.com/index.html">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <title>Simplemations — Automatización simple para tu empresa</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        @font-face { font-family: 'Jakarta Fallback'; src: local('Arial'); size-adjust: 108%; ascent-override: 90%; descent-override: 22%; line-gap-override: 0%; }
-        @font-face { font-family: 'Inter Fallback'; src: local('Arial'); size-adjust: 107%; ascent-override: 90%; descent-override: 22%; line-gap-override: 0%; }
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', 'Inter Fallback', system-ui, sans-serif; background: #FAFCFF; }
-        .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 68px; display: flex; align-items: center; background: #FAFCFF; border-bottom: 1px solid rgba(59,130,195,0.1); isolation: isolate; contain: layout style paint; }
-        .nav__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
-        .nav__logo { display: inline-flex; align-items: center; flex: 0 0 auto; width: 166px; height: 32px; font-family: 'Plus Jakarta Sans', 'Jakarta Fallback', system-ui, sans-serif; font-weight: 800; font-size: 1.25rem; line-height: 32px; letter-spacing: -0.025em; color: #1A2B42; text-decoration: none; white-space: nowrap; }
-        .nav__logo span { color: #2B7CE5; }
-        .nav__links { display: none; gap: 3rem; align-items: center; list-style: none; }
-        .nav__links a { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.8125rem; font-weight: 500; color: #556B82; text-decoration: none; transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .nav__links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #2B7CE5; border-radius: 1px; transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-        .nav__links a:hover, .nav__links a.active { color: #2B7CE5; }
-        .nav__links a:hover::after { width: 100%; }
-        .nav__links a.active::after { width: 100%; transition: none; }
-        .nav__actions { display: flex; align-items: center; gap: 1rem; }
-        .nav__cta { display: none; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 0.8125rem; font-weight: 600; color: #fff; background: #2B7CE5; padding: 0.55rem 1.25rem; border-radius: 9999px; text-decoration: none; box-shadow: 0 1px 3px rgba(43, 124, 229, 0.06); }
-        .nav__mobile-toggle { display: flex; flex-direction: column; gap: 5px; padding: 4px; }
-        .nav__mobile-toggle span { display: block; width: 20px; height: 2px; background: #556B82; border-radius: 2px; }
-        @media (min-width: 768px) { .nav__links { display: flex; } .nav__cta { display: inline-flex; } .nav__mobile-toggle { display: none; } }
-    </style>
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/components.css">
@@ -67,7 +47,7 @@
             </ul>
             <div class="nav__actions">
                 <a href="contacto.html" class="nav__cta">Auditoría gratuita</a>
-                <button class="nav__mobile-toggle" aria-label="Abrir menú">
+                <button type="button" class="nav__mobile-toggle" aria-label="Abrir menú">
                     <span></span><span></span><span></span>
                 </button>
             </div>
@@ -95,7 +75,7 @@
                     </div>
 
                     <h1>
-                        Automatización simple para empresas reales.
+                        Automatizaciones simples para empresas reales.
                     </h1>
 
                     <p class="hero__subtitle">
@@ -191,7 +171,7 @@
         <div class="container">
             <div class="section-header section-header--center reveal">
                 <span class="section-label">Cómo trabajamos</span>
-                <h2 class="section-title">Simple. Como el nombre.</h2>
+                <h2 class="section-title">Simple. Como nuestro nombre.</h2>
                 <p class="section-desc">No empezamos vendiéndote una herramienta. Primero miramos dónde tiene sentido automatizar y dónde no.</p>
             </div>
             <div class="grid grid--3">
@@ -258,27 +238,27 @@
             </div>
             <div class="reveal">
                 <div class="faq-item">
-                    <button class="faq-item__q">¿Necesito conocimientos técnicos?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <button type="button" class="faq-item__q" aria-expanded="false">¿Necesito conocimientos técnicos?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
                     <div class="faq-item__a"><p>No. Nos encargamos de todo: diseño, instalación, configuración y mantenimiento. Tú solo dices qué necesitas.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-item__q">¿La auditoría tiene coste?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <button type="button" class="faq-item__q" aria-expanded="false">¿La auditoría tiene coste?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
                     <div class="faq-item__a"><p>No. La auditoría es gratuita siempre. Revisamos tu caso, detectamos oportunidades y te decimos qué haríamos antes de hablar de mensualidades.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-item__q">¿Cuánto cuesta si sigo adelante?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <button type="button" class="faq-item__q" aria-expanded="false">¿Cuánto cuesta si sigo adelante?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
                     <div class="faq-item__a"><p>Depende de lo que necesites. Trabajamos con tarifa plana mensual — sin costes iniciales de desarrollo. Tras la auditoría gratuita te damos un precio cerrado.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-item__q">¿Qué pasa si no me convence?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <button type="button" class="faq-item__q" aria-expanded="false">¿Qué pasa si no me convence?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
                     <div class="faq-item__a"><p>Sin permanencia. Si el sistema no te aporta valor, lo retiramos y dejas de pagar. Así de simple.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-item__q">¿En qué se diferencia de un chatbot genérico?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <button type="button" class="faq-item__q" aria-expanded="false">¿En qué se diferencia de un chatbot genérico?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
                     <div class="faq-item__a"><p>Lo hacemos a medida para tu negocio. No es un widget con respuestas predefinidas — entiende tu contexto, tus productos y tus procesos.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-item__q">¿Para qué tipo de empresas trabajáis?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
+                    <button type="button" class="faq-item__q" aria-expanded="false">¿Para qué tipo de empresas trabajáis?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg></button>
                     <div class="faq-item__a"><p>Cualquier empresa que atienda clientes o tenga procesos repetitivos: clínicas, agencias, consultoras, tiendas online, despachos profesionales...</p></div>
                 </div>
             </div>
@@ -391,7 +371,7 @@
 
     <!-- COOKIE BANNER -->
     <div class="cookie-banner">
-        <p class="cookie-banner__text">Usamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas nuestra <a href="#">política de cookies</a>.</p>
+        <p class="cookie-banner__text">Usamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas nuestra <a href="privacidad.html#cookies">política de cookies</a>.</p>
         <div class="cookie-banner__actions">
             <button class="cookie-banner__btn cookie-banner__btn--reject">Rechazar</button>
             <button class="cookie-banner__btn cookie-banner__btn--accept">Aceptar</button>
