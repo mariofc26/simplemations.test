@@ -38,130 +38,111 @@
         <a href="index.html">Inicio</a><a href="servicios.html">Servicios</a><a href="precios.html">Precios</a><a href="contacto.html">Contacto</a>
     </div>
 
-    <!-- HERO -->
-    <section class="contact-hero">
+    <!-- CONTACTO -->
+    <section class="contact-hero section">
         <div class="container">
-            <div class="reveal">
-                <span class="section-label">Contacto</span>
-                <h1 class="section-title">Pide tu auditoría gratuita.</h1>
-                <p class="section-desc" style="margin-top: var(--sp-md);">Sin coste · Sin compromiso · Respondemos en menos de 24h</p>
-            </div>
-        </div>
-    </section>
+            <div class="contact-layout">
+                <div class="contact-intro reveal">
+                    <h1 class="section-title">Pide tu auditoría gratuita.</h1>
+                    <p class="section-desc">Cuéntanos cómo trabajas y te diremos qué merece la pena automatizar, qué no y por dónde empezar.</p>
+                </div>
 
-    <!-- FORMULARIO -->
-    <section class="section" style="background: var(--c-surface);">
-        <div class="container container--sm">
-            <div class="reveal">
-                <form>
-                    <div class="form-group">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" class="form-input" placeholder="Tu nombre">
+                <div class="contact-body">
+                    <div class="contact-main reveal reveal-d1">
+                        <form class="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Nombre</label>
+                                    <input id="name" name="name" type="text" class="form-input" placeholder="Tu nombre" autocomplete="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input id="email" name="email" type="email" class="form-input" placeholder="tu@empresa.com" autocomplete="email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="company">Empresa</label>
+                                <input id="company" name="company" type="text" class="form-input" placeholder="Nombre de tu empresa" autocomplete="organization">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="review">Qué quieres revisar</label>
+                                <select id="review" name="review" class="form-input">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="atencion-cliente">Atención al cliente o WhatsApp</option>
+                                    <option value="tareas-repetitivas">Tareas repetitivas internas</option>
+                                    <option value="integraciones">Integraciones entre herramientas</option>
+                                    <option value="asistente-ia">Asistente IA para el equipo</option>
+                                    <option value="no-se">No lo tengo claro todavía</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="message">Cuéntanos más</label>
+                                <textarea id="message" name="message" class="form-input" placeholder="Qué proceso quieres revisar, qué tarea se repite mucho o dónde pierdes tiempo o clientes."></textarea>
+                            </div>
+                            <button type="submit" class="form-submit">Pedir auditoría gratuita</button>
+                            <p class="form-hint">Sin coste. Sin compromiso. Respondemos en menos de 24h laborables.</p>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-input" placeholder="tu@empresa.com">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Empresa</label>
-                        <input type="text" class="form-input" placeholder="Nombre de tu empresa">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Qué quieres revisar</label>
-                        <select class="form-input">
-                            <option value="">Selecciona una opción</option>
-                            <option value="atencion-cliente">Atención al cliente o WhatsApp</option>
-                            <option value="tareas-repetitivas">Tareas repetitivas internas</option>
-                            <option value="integraciones">Integraciones entre herramientas</option>
-                            <option value="asistente-ia">Asistente IA para el equipo</option>
-                            <option value="no-se">No lo tengo claro todavía</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Cuéntanos más</label>
-                        <textarea class="form-input" placeholder="¿Qué proceso quieres revisar? ¿Qué tarea se repite mucho? ¿Dónde pierdes tiempo o leads?"></textarea>
-                    </div>
-                    <button type="submit" class="form-submit">Pedir auditoría gratuita</button>
-                    <p class="form-hint">Sin coste. Te respondemos en menos de 24h laborables.</p>
-                </form>
-            </div>
-        </div>
-    </section>
 
-    <!-- QUÉ PASA DESPUÉS -->
-    <section class="section" style="background: var(--c-elevated);">
-        <div class="container container--sm">
-            <div class="section-header section-header--center reveal">
-                <span class="section-label">Después de enviar</span>
-                <h2 class="section-title">Qué pasa cuando rellenas el formulario</h2>
-            </div>
-            <div class="grid grid--2">
-                <div class="card card--flat reveal reveal-d1">
-                    <div class="step">
-                        <div class="step__number">1</div>
-                        <h3>Leemos tu caso</h3>
-                        <p>Revisamos tu mensaje y preparamos preguntas específicas para tu negocio.</p>
-                    </div>
-                </div>
-                <div class="card card--flat reveal reveal-d2">
-                    <div class="step">
-                        <div class="step__number">2</div>
-                        <h3>Llamada de 20 min</h3>
-                        <p>Una conversación corta para entender procesos, herramientas y prioridades.</p>
-                    </div>
-                </div>
-                <div class="card card--flat reveal reveal-d1">
-                    <div class="step">
-                        <div class="step__number">3</div>
-                        <h3>Mapa de oportunidades</h3>
-                        <p>Te mostramos dónde automatizar y un precio cerrado solo si decides seguir.</p>
-                    </div>
-                </div>
-                <div class="card card--flat reveal reveal-d2">
-                    <div class="step">
-                        <div class="step__number">4</div>
-                        <h3>Honestidad total</h3>
-                        <p>Si no vemos una mejora clara, te lo decimos. Sin intentar venderte nada.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                    <aside class="contact-panel reveal reveal-d2">
+                        <div class="contact-next">
+                            <span class="section-label">Después de enviar</span>
+                            <h2>Qué pasa después</h2>
+                            <ol class="contact-steps">
+                                <li>
+                                    <span>1</span>
+                                    <div>
+                                        <h3>Leemos tu caso</h3>
+                                        <p>Revisamos tu mensaje y detectamos qué información falta.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>2</span>
+                                    <div>
+                                        <h3>Llamada corta</h3>
+                                        <p>Entendemos procesos, herramientas y prioridades reales.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>3</span>
+                                    <div>
+                                        <h3>Propuesta clara</h3>
+                                        <p>Te decimos qué automatizar, qué dejar igual y el precio si seguimos.</p>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
 
-    <!-- CONTACTO DIRECTO -->
-    <section class="section" style="background: var(--c-surface);">
-        <div class="container container--sm">
-            <div class="section-header section-header--center reveal">
-                <span class="section-label">¿Prefieres escribirnos?</span>
-                <h2 class="section-title">También puedes contactarnos directamente</h2>
-            </div>
-            <div class="contact-info reveal">
-                <div class="contact-info__item">
-                    <div class="contact-info__icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <div class="contact-info">
+                        <div class="contact-info__item">
+                            <div class="contact-info__icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div>
+                                <p class="contact-info__label">Email directo</p>
+                                <p class="contact-info__value">info@simplemations.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-info__item">
+                            <div class="contact-info__icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                                <p class="contact-info__label">Tiempo de respuesta</p>
+                                <p class="contact-info__value">Menos de 24h laborables</p>
+                            </div>
+                        </div>
+                        <div class="contact-info__item">
+                            <div class="contact-info__icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            </div>
+                            <div>
+                                <p class="contact-info__label">Auditoría</p>
+                                <p class="contact-info__value">Gratis, sin compromiso y sin presión comercial</p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <p class="contact-info__label">Email directo</p>
-                        <p class="contact-info__value">info@simplemations.com</p>
-                    </div>
-                </div>
-                <div class="contact-info__item">
-                    <div class="contact-info__icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    </div>
-                    <div>
-                        <p class="contact-info__label">Tiempo de respuesta</p>
-                        <p class="contact-info__value">Menos de 24h en día laborable</p>
-                    </div>
-                </div>
-                <div class="contact-info__item">
-                    <div class="contact-info__icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    </div>
-                    <div>
-                        <p class="contact-info__label">Ubicación</p>
-                        <p class="contact-info__value">100% remoto — trabajamos con empresas de toda España</p>
-                    </div>
+                    </aside>
                 </div>
             </div>
         </div>

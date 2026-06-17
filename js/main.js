@@ -120,6 +120,24 @@
         });
     }
 
+    function bindInternalAnchors() {
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('a[href^="#"]');
+            if (!link) return;
+            if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+            var hash = link.getAttribute('href');
+            if (!hash || hash === '#') return;
+
+            var target = document.querySelector(hash);
+            if (!target) return;
+
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.replaceState(null, '', hash);
+        });
+    }
+
     function initReveal() {
         var reveals = document.querySelectorAll('.reveal');
         if (revealObserver) revealObserver.disconnect();
@@ -311,6 +329,33 @@
         });
     }
 
+    function initMobileCarousels() {
+        document.querySelectorAll('.mobile-carousel').forEach(function(carousel) {
+            var dots = [];
+            var next = carousel.nextElementSibling;
+            if (next && next.classList.contains('mobile-dots')) {
+                dots = Array.prototype.slice.call(next.querySelectorAll('.mobile-dots__dot'));
+            }
+            if (!dots.length) return;
+
+            var cards = carousel.children;
+            if (!cards.length) return;
+
+            function updateDots() {
+                var cardWidth = cards[0].offsetWidth;
+                var gap = parseInt(getComputedStyle(carousel).gap) || 16;
+                var index = Math.round(carousel.scrollLeft / (cardWidth + gap));
+                index = Math.max(0, Math.min(index, dots.length - 1));
+                dots.forEach(function(dot, i) {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            carousel.addEventListener('scroll', updateDots);
+            updateDots();
+        });
+    }
+
     function initPageContent() {
         initReveal();
         initFaq();
@@ -319,10 +364,12 @@
         initCookieBanner();
         initStepsCarousel();
         initPricingCarousel();
+        initMobileCarousels();
     }
 
     bindPersistentNav();
     bindPjaxNavigation();
+    bindInternalAnchors();
     updateActiveNav(window.location.href);
     initPageContent();
 })();
