@@ -582,12 +582,11 @@
 
 .pricing-card--featured {
     position: relative;
-    padding-top: calc(var(--sp-xl) + 0.5rem);
 }
 
 .pricing-card__badge {
     position: absolute;
-    top: -13px;
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--c-primary);
@@ -766,16 +765,8 @@
         overflow: visible;
     }
 
-    .pricing-carousel > .card--featured {
-        margin-top: var(--sp-md);
-    }
-
     .pricing-card {
         padding: var(--sp-sm);
-    }
-
-    .pricing-card--featured {
-        padding-top: var(--sp-md);
     }
 
     .pricing-card__badge {
