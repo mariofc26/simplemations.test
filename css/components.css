@@ -933,8 +933,9 @@ body.page-exit > .footer {
     }
 
     .footer__grid {
-        grid-template-columns: 1fr 1fr;
-        gap: var(--sp-xl);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        column-gap: var(--sp-md);
+        row-gap: var(--sp-xl);
     }
 
     .footer__grid > :first-child {
