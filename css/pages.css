@@ -694,9 +694,9 @@
 
     .steps-carousel > .card {
         flex: 0 0 72%;
+        min-width: 72%;
+        flex-shrink: 0;
         scroll-snap-align: center;
-        min-width: 0;
-        padding: var(--sp-md);
     }
 
     .steps-carousel > .card .step {
