@@ -49,7 +49,7 @@
 
                 <div class="contact-body">
                     <div class="contact-main reveal reveal-d1">
-                        <form class="contact-form">
+                        <form class="contact-form" action="https://mariofc26.app.n8n.cloud/webhook/simplemations-contacto" method="post" data-webhook-url="https://mariofc26.app.n8n.cloud/webhook/simplemations-contacto">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label" for="name">Nombre</label>
@@ -65,13 +65,13 @@
                                 <input id="company" name="company" type="text" class="form-input" placeholder="Nombre de tu empresa" autocomplete="organization">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="review">Qué quieres revisar</label>
-                                <select id="review" name="review" class="form-input">
-                                    <option value="">Selecciona una opción</option>
-                                    <option value="atencion-cliente">Atención al cliente o WhatsApp</option>
-                                    <option value="tareas-repetitivas">Tareas repetitivas internas</option>
-                                    <option value="integraciones">Integraciones entre herramientas</option>
-                                    <option value="asistente-ia">Asistente IA para el equipo</option>
+                                <label class="form-label" for="budget">Presupuesto estimado</label>
+                                <select id="budget" name="budget" class="form-input">
+                                    <option value="">Selecciona un rango</option>
+                                    <option value="menos-1000">Menos de 1.000€</option>
+                                    <option value="1000-3000">1.000€ - 3.000€</option>
+                                    <option value="3000-6000">3.000€ - 6.000€</option>
+                                    <option value="mas-6000">Más de 6.000€</option>
                                     <option value="no-se">No lo tengo claro todavía</option>
                                 </select>
                             </div>
@@ -86,28 +86,28 @@
 
                     <aside class="contact-panel reveal reveal-d2">
                         <div class="contact-next">
-                            <span class="section-label">Después de enviar</span>
-                            <h2>Qué pasa después</h2>
+                            <span class="section-label">Siguientes pasos</span>
+                            <h2>De tu idea a un plan claro</h2>
                             <ol class="contact-steps">
                                 <li>
                                     <span>1</span>
                                     <div>
-                                        <h3>Leemos tu caso</h3>
-                                        <p>Revisamos tu mensaje y detectamos qué información falta.</p>
+                                        <h3>Revisamos tu contexto</h3>
+                                        <p>Leemos tu mensaje, presupuesto estimado y objetivos para entender el punto de partida.</p>
                                     </div>
                                 </li>
                                 <li>
                                     <span>2</span>
                                     <div>
-                                        <h3>Llamada corta</h3>
-                                        <p>Entendemos procesos, herramientas y prioridades reales.</p>
+                                        <h3>Priorizamos oportunidades</h3>
+                                        <p>Detectamos qué automatizaciones tienen más impacto y cuáles conviene dejar para más adelante.</p>
                                     </div>
                                 </li>
                                 <li>
                                     <span>3</span>
                                     <div>
-                                        <h3>Propuesta clara</h3>
-                                        <p>Te decimos qué automatizar, qué dejar igual y el precio si seguimos.</p>
+                                        <h3>Te enviamos una propuesta</h3>
+                                        <p>Recibes una recomendación clara con alcance, tiempos y presupuesto antes de decidir.</p>
                                     </div>
                                 </li>
                             </ol>

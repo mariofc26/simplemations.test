@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
     'use strict';
 
     var revealObserver = null;
@@ -170,18 +170,155 @@
         });
     }
 
+    var CHATBOT_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot';
+    var CHATBOT_STORAGE_KEY = 'simplemations-chat-history-v3';
+    var CHATBOT_SESSION_KEY = 'simplemations-chat-session-id';
+    var CHATBOT_VISITOR_KEY = 'simplemations-visitor-id';
+
+    function getStoredId(key, prefix) {
+        var existing = localStorage.getItem(key);
+        if (existing) return existing;
+        var value = prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(key, value);
+        return value;
+    }
+
+    function readChatHistory() {
+        try {
+            return JSON.parse(localStorage.getItem(CHATBOT_STORAGE_KEY) || '[]');
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveChatHistory(history) {
+        localStorage.setItem(CHATBOT_STORAGE_KEY, JSON.stringify(history.slice(-20)));
+    }
+
+    function appendChatMessage(messages, role, text, options) {
+        var bubble = document.createElement('div');
+        bubble.className = 'chatbot__bubble chatbot__bubble--' + role;
+        if (options && options.loading) bubble.classList.add('chatbot__bubble--loading');
+        if (options && options.error) bubble.classList.add('chatbot__bubble--error');
+        bubble.textContent = text;
+        messages.appendChild(bubble);
+        messages.scrollTop = messages.scrollHeight;
+        return bubble;
+    }
+
+    function renderChatHistory(messages) {
+        var history = readChatHistory();
+        messages.innerHTML = '';
+        if (!history.length) {
+            appendChatMessage(messages, 'assistant', 'Hola. Soy el asistente de Simplemations. Puedo ayudarte con servicios, automatizaciones, chatbots, IA y auditoria gratuita.');
+            return;
+        }
+        history.forEach(function(item) {
+            appendChatMessage(messages, item.role, item.text);
+        });
+    }
+
+    function setChatBusy(root, busy) {
+        var input = root.querySelector('.chatbot__input');
+        var send = root.querySelector('.chatbot__send');
+        var status = root.querySelector('.chatbot__w-status');
+        if (input) input.disabled = busy;
+        if (send) send.disabled = busy;
+        if (status) status.textContent = busy ? 'Pensando...' : 'En linea';
+    }
+
+    function sendChatMessage(root) {
+        var input = root.querySelector('.chatbot__input');
+        var messages = root.querySelector('.chatbot__messages');
+        if (!input || !messages) return;
+
+        var message = input.value.trim();
+        if (!message) return;
+
+        var history = readChatHistory();
+        history.push({ role: 'user', text: message });
+        saveChatHistory(history);
+        appendChatMessage(messages, 'user', message);
+        input.value = '';
+
+        var loading = appendChatMessage(messages, 'assistant', 'Revisando la informacion...', { loading: true });
+        setChatBusy(root, true);
+
+        fetch(CHATBOT_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: message,
+                session_id: getStoredId(CHATBOT_SESSION_KEY, 'session'),
+                visitor_id: getStoredId(CHATBOT_VISITOR_KEY, 'visitor'),
+                source_url: window.location.href
+            })
+        })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Chatbot request failed');
+                return response.json();
+            })
+            .then(function(data) {
+                var answer = data.answer || data.message || 'He recibido tu mensaje, pero no he podido generar una respuesta completa.';
+                loading.classList.remove('chatbot__bubble--loading');
+                loading.textContent = answer;
+                history = readChatHistory();
+                history.push({ role: 'assistant', text: answer });
+                saveChatHistory(history);
+                if (data.session_id) localStorage.setItem(CHATBOT_SESSION_KEY, data.session_id);
+            })
+            .catch(function() {
+                var fallback = 'Estoy terminando de conectarme con la base de conocimiento. Mientras tanto, puedo orientarte mejor si me escribes a info@simplemations.com o pides la auditoria gratuita desde Contacto.';
+                loading.classList.remove('chatbot__bubble--loading');
+                loading.classList.add('chatbot__bubble--notice');
+                loading.textContent = fallback;
+                history = readChatHistory();
+                history.push({ role: 'assistant', text: fallback });
+                saveChatHistory(history);
+            })
+            .finally(function() {
+                setChatBusy(root, false);
+                if (input) input.focus();
+            });
+    }
+
     function initChatbot() {
-        var chatTrigger = document.querySelector('.chatbot__trigger');
-        var chatWindow = document.querySelector('.chatbot__window');
-        var chatClose = document.querySelector('.chatbot__w-close');
-        var chatTooltip = document.querySelector('.chatbot__tooltip');
+        var root = document.querySelector('.chatbot');
+        if (!root || root.getAttribute('data-chat-ready') === 'true') return;
+        root.setAttribute('data-chat-ready', 'true');
+
+        var chatTrigger = root.querySelector('.chatbot__trigger');
+        var chatWindow = root.querySelector('.chatbot__window');
+        var chatClose = root.querySelector('.chatbot__w-close');
+        var chatTooltip = root.querySelector('.chatbot__tooltip');
+        var messages = root.querySelector('.chatbot__messages');
+        var input = root.querySelector('.chatbot__input');
+        var send = root.querySelector('.chatbot__send');
+
+        if (messages) renderChatHistory(messages);
 
         if (chatTrigger && chatWindow) {
             chatTrigger.addEventListener('click', function() {
                 chatWindow.classList.toggle('open');
+                chatTrigger.setAttribute('aria-expanded', chatWindow.classList.contains('open') ? 'true' : 'false');
                 if (chatTooltip) chatTooltip.style.display = 'none';
+                if (chatWindow.classList.contains('open') && input) setTimeout(function() { input.focus(); }, 120);
             });
-            if (chatClose) chatClose.addEventListener('click', function() { chatWindow.classList.remove('open'); });
+        }
+        if (chatClose && chatWindow) {
+            chatClose.addEventListener('click', function() {
+                chatWindow.classList.remove('open');
+                if (chatTrigger) chatTrigger.setAttribute('aria-expanded', 'false');
+            });
+        }
+        if (send) send.addEventListener('click', function() { sendChatMessage(root); });
+        if (input) {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChatMessage(root);
+                }
+            });
         }
 
         if (chatTooltip) {
@@ -216,19 +353,70 @@
                 inputs.forEach(function(input) {
                     if (!validateField(input)) allValid = false;
                 });
-                if (allValid) {
-                    var btn = form.querySelector('.form-submit, button[type="submit"]');
-                    if (btn) {
-                        var orig = btn.textContent;
-                        btn.textContent = 'Enviado correctamente';
-                        btn.style.background = '#10B981';
-                        setTimeout(function() { btn.textContent = orig; btn.style.background = ''; }, 2500);
-                    }
+                if (!allValid) return;
+
+                var endpoint = form.getAttribute('data-webhook-url') || form.getAttribute('action');
+                var btn = form.querySelector('.form-submit, button[type="submit"]');
+                var hint = form.querySelector('.form-hint');
+
+                if (!endpoint || endpoint.indexOf('TU_N8N_DOMINIO') !== -1) {
+                    showFormMessage(btn, hint, 'Webhook pendiente de configurar', false);
+                    return;
                 }
+
+                submitWebhookForm(form, endpoint, btn, hint, inputs);
             });
         });
     }
 
+    function submitWebhookForm(form, endpoint, btn, hint, inputs) {
+        var originalText = btn ? (btn.getAttribute('data-original-text') || btn.textContent) : '';
+        if (btn && !btn.getAttribute('data-original-text')) btn.setAttribute('data-original-text', originalText);
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+            btn.style.background = '';
+        }
+        if (hint) hint.textContent = 'Estamos enviando tu solicitud...';
+
+        var payload = new URLSearchParams(new FormData(form));
+        payload.set('source_page', window.location.href);
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: payload.toString()
+        })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Form submission failed');
+                return response.text();
+            })
+            .then(function() {
+                showFormMessage(btn, hint, 'Solicitud enviada correctamente', true);
+                form.reset();
+                inputs.forEach(function(input) { input.classList.remove('valid', 'invalid'); });
+            })
+            .catch(function() {
+                showFormMessage(btn, hint, 'No se pudo enviar. Escríbenos a info@simplemations.com.', false);
+            })
+            .finally(function() {
+                if (btn) {
+                    setTimeout(function() {
+                        btn.disabled = false;
+                        btn.textContent = btn.getAttribute('data-original-text') || originalText;
+                        btn.style.background = '';
+                    }, 3000);
+                }
+            });
+    }
+
+    function showFormMessage(btn, hint, message, success) {
+        if (btn) {
+            btn.textContent = message;
+            btn.style.background = success ? '#10B981' : '#EF4444';
+        }
+        if (hint) hint.textContent = success ? 'Gracias. Hemos recibido tus datos y te contactaremos en menos de 24h laborables.' : message;
+    }
     function validateField(input) {
         var tag = input.tagName.toLowerCase();
         var type = input.getAttribute('type');
@@ -356,6 +544,47 @@
         });
     }
 
+    function initCarouselArrows() {
+        document.querySelectorAll('.slider-arrows').forEach(function(controls) {
+            var carousel = findPreviousCarousel(controls);
+            if (!carousel) return;
+
+            var prev = controls.querySelector('.slider-arrow--prev');
+            var next = controls.querySelector('.slider-arrow--next');
+            var items = Array.prototype.filter.call(carousel.children, function(child) {
+                return child.classList.contains('card') || child.classList.contains('sector-card');
+            });
+            if (!items.length) return;
+
+            function go(direction) {
+                var gap = parseInt(getComputedStyle(carousel).gap) || 16;
+                var step = items[0].offsetWidth + gap;
+                var currentIndex = Math.round(carousel.scrollLeft / step);
+                var targetIndex = (currentIndex + direction + items.length) % items.length;
+                var target = items[targetIndex].offsetLeft - (carousel.offsetWidth - items[targetIndex].offsetWidth) / 2;
+
+                carousel.scrollTo({
+                    left: Math.max(0, target),
+                    behavior: 'smooth'
+                });
+            }
+
+            if (prev) prev.addEventListener('click', function() { go(-1); });
+            if (next) next.addEventListener('click', function() { go(1); });
+        });
+    }
+
+    function findPreviousCarousel(element) {
+        var node = element.previousElementSibling;
+        while (node) {
+            if (node.matches('.steps-carousel, .pricing-carousel, .mobile-carousel')) {
+                return node;
+            }
+            node = node.previousElementSibling;
+        }
+        return null;
+    }
+
     function initPageContent() {
         initReveal();
         initFaq();
@@ -365,6 +594,7 @@
         initStepsCarousel();
         initPricingCarousel();
         initMobileCarousels();
+        initCarouselArrows();
     }
 
     bindPersistentNav();

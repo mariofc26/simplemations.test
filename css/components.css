@@ -33,6 +33,26 @@
     .grid--4 { grid-template-columns: repeat(4, 1fr); }
 }
 
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container,
+    .nav__inner {
+        padding-left: clamp(2rem, 5vw, 3rem);
+        padding-right: clamp(2rem, 5vw, 3rem);
+    }
+
+    .section {
+        padding: clamp(4.5rem, 8vw, 6rem) 0;
+    }
+
+    .section-header {
+        margin-bottom: var(--sp-2xl);
+    }
+
+    .grid {
+        gap: var(--sp-xl);
+    }
+}
+
 /* ═══════════════════════════════════════════════════
    NAV
    ═══════════════════════════════════════════════════ */
@@ -984,7 +1004,7 @@ body.page-exit > .footer {
     }
 
     .chatbot__tooltip-desc {
-        font-size: 0.6rem;
+        font-size: 0.72rem;
     }
 
     body.cookie-visible .chatbot {

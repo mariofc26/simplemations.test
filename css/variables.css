@@ -22,9 +22,9 @@
     --f-display: 'Plus Jakarta Sans', 'Jakarta Fallback', system-ui, sans-serif;
     --f-body: 'Inter', 'Inter Fallback', system-ui, sans-serif;
 
-    --fs-xs: 0.6875rem;
-    --fs-sm: 0.8125rem;
-    --fs-base: 0.9375rem;
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.875rem;
+    --fs-base: 1rem;
     --fs-md: 1.0625rem;
     --fs-lg: 1.25rem;
     --fs-xl: clamp(1.5rem, 3vw, 2rem);
