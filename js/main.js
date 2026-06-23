@@ -219,8 +219,11 @@
     function extractLeadDetails(text) {
         var emailMatch = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
         var phoneMatch = text.match(/(?:\+?\d[\d\s().-]{7,}\d)/);
-        var nameMatch = text.match(/(?:me llamo|mi nombre es|nombre(?: y apellidos)?\s*[:\-]?)\s+([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+){1,4})/i);
-        var fullName = nameMatch ? nameMatch[1].trim() : findStandaloneFullName(text);
+        var textWithoutContact = text
+            .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, ' ')
+            .replace(/(?:\+?\d[\d\s().-]{7,}\d)/g, ' ');
+        var nameMatch = textWithoutContact.match(/(?:me llamo|mi nombre es|nombre(?: y apellidos)?\s*[:\-]?)\s+([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+){1,4})/i);
+        var fullName = nameMatch ? nameMatch[1].trim() : findStandaloneFullName(textWithoutContact);
 
         return {
             email: emailMatch ? emailMatch[0].toLowerCase() : '',
@@ -230,7 +233,7 @@
     }
 
     function findStandaloneFullName(text) {
-        var blocked = /\b(chatbot|chatbots|servicio|servicios|producto|productos|informacion|info|interesado|interesada|quiero|necesito|auditoria|presupuesto|telefono|email|correo|empresa|automatizar|proceso|web|whatsapp|leads|soporte|captacion)\b/i;
+        var blocked = /\b(chatbot|chatbots|servicio|servicios|producto|productos|informacion|info|interesado|interesada|quiero|necesito|necesitas|necesario|auditoria|presupuesto|telefono|email|mail|correo|empresa|automatizar|proceso|web|whatsapp|leads|soporte|captacion|enviado|enviar|recibido|falta|datos|solicitud|coordinar|hola|gracias|vale|si|no)\b/i;
         var lines = text
             .split(/\n+/)
             .map(function(line) { return line.trim(); })
@@ -239,7 +242,7 @@
 
         for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
-            if (line.indexOf('@') !== -1 || /\d/.test(line) || blocked.test(line)) continue;
+            if (line.indexOf('@') !== -1 || /\d/.test(line) || /[?¿!¡.,:;]/.test(line) || blocked.test(line)) continue;
             var words = line.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g) || [];
             if (words.length >= 2 && words.length <= 5 && words.join(' ').length >= 6) {
                 return words.join(' ');
@@ -278,7 +281,7 @@
 
         var context = recentUserContext(history);
         var details = extractLeadDetails(context);
-        var contactKey = details.email + '|' + details.phone;
+        var contactKey = getStoredId(CHATBOT_SESSION_KEY, 'session') + '|' + details.email + '|' + details.phone + '|' + details.fullName;
         if (!contactKey) return Promise.resolve(false);
 
         var sent = readSentChatLeads();
@@ -392,6 +395,10 @@
         if (options && options.error) bubble.classList.add('chatbot__bubble--error');
         setChatBubbleText(bubble, role, text);
         messages.appendChild(bubble);
+        if (messages.children.length > 1) {
+            var root = messages.closest('.chatbot');
+            if (root) root.classList.add('chatbot--expanded');
+        }
         messages.scrollTop = messages.scrollHeight;
         return bubble;
     }

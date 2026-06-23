@@ -1966,6 +1966,21 @@
     overflow-wrap: anywhere;
 }
 
+.chatbot--expanded .chatbot__window {
+    width: clamp(420px, 34vw, 540px);
+    max-width: calc(100vw - 2rem);
+}
+
+.chatbot--expanded .chatbot__messages {
+    min-height: 320px;
+    max-height: min(58vh, 500px);
+    padding: 1.15rem;
+}
+
+.chatbot--expanded .chatbot__bubble {
+    max-width: 82%;
+}
+
 .chatbot__bubble p {
     margin: 0;
 }
@@ -2047,11 +2062,24 @@
 }
 
 @media (max-width: 767px) {
+    .chatbot--expanded .chatbot__window {
+        width: calc(100vw - 2rem);
+    }
+
     .chatbot__messages {
         max-height: min(52vh, 360px);
     }
 
+    .chatbot--expanded .chatbot__messages {
+        min-height: 260px;
+        max-height: min(58vh, 420px);
+    }
+
     .chatbot__bubble {
+        max-width: 92%;
+    }
+
+    .chatbot--expanded .chatbot__bubble {
         max-width: 92%;
     }
 }
