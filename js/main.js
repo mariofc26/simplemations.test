@@ -218,11 +218,17 @@
     function extractLeadDetails(text) {
         var emailMatch = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
         var phoneMatch = text.match(/(?:\+?\d[\d\s().-]{7,}\d)/);
+        var nameMatch = text.match(/(?:me llamo|mi nombre es|nombre(?: y apellidos)?\s*[:\-]?)\s+([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+){1,4})/i);
 
         return {
             email: emailMatch ? emailMatch[0].toLowerCase() : '',
-            phone: phoneMatch ? phoneMatch[0].replace(/\s+/g, ' ').trim() : ''
+            phone: phoneMatch ? phoneMatch[0].replace(/\s+/g, ' ').trim() : '',
+            fullName: nameMatch ? nameMatch[1].trim() : ''
         };
+    }
+
+    function hasFullName(name) {
+        return name && name.split(/\s+/).filter(Boolean).length >= 2;
     }
 
     function hasUsefulBusinessContext(text) {
@@ -239,7 +245,10 @@
         var context = recentUserContext(history);
         var details = extractLeadDetails(context);
 
-        return Boolean(details.email || details.phone) && hasUsefulBusinessContext(context);
+        return Boolean(details.email) &&
+            Boolean(details.phone) &&
+            hasFullName(details.fullName) &&
+            hasUsefulBusinessContext(context);
     }
 
     function maybeSendChatLead(history) {
@@ -247,7 +256,7 @@
 
         var context = recentUserContext(history);
         var details = extractLeadDetails(context);
-        var contactKey = details.email || details.phone;
+        var contactKey = details.email + '|' + details.phone;
         if (!contactKey) return Promise.resolve(false);
 
         var sent = readSentChatLeads();
@@ -259,10 +268,12 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: context,
+                name: details.fullName,
+                full_name: details.fullName,
                 email: details.email,
                 phone: details.phone,
                 conversation_context: context,
-                lead_stage: 'qualified_contact',
+                lead_stage: 'complete_contact',
                 session_id: getStoredId(CHATBOT_SESSION_KEY, 'session'),
                 visitor_id: getStoredId(CHATBOT_VISITOR_KEY, 'visitor'),
                 source_url: window.location.href
