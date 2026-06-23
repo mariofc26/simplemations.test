@@ -223,7 +223,7 @@
             .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, ' ')
             .replace(/(?:\+?\d[\d\s().-]{7,}\d)/g, ' ');
         var nameMatch = textWithoutContact.match(/(?:me llamo|mi nombre es|nombre(?: y apellidos)?\s*[:\-]?)\s+([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+){1,4})/i);
-        var fullName = nameMatch ? nameMatch[1].trim() : findStandaloneFullName(textWithoutContact);
+        var fullName = findContactLineFullName(text) || (nameMatch ? nameMatch[1].trim() : findStandaloneFullName(textWithoutContact));
 
         return {
             email: emailMatch ? emailMatch[0].toLowerCase() : '',
@@ -232,8 +232,31 @@
         };
     }
 
+    function findContactLineFullName(text) {
+        var lines = text
+            .split(/\n+/)
+            .map(function(line) { return line.trim(); })
+            .filter(Boolean)
+            .reverse();
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (line.indexOf('@') === -1 && !/(?:\+?\d[\d\s().-]{7,}\d)/.test(line)) continue;
+            var cleaned = line
+                .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, ' ')
+                .replace(/(?:\+?\d[\d\s().-]{7,}\d)/g, ' ')
+                .replace(/[,:;|()[\]{}]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+            var name = normalizeFullNameCandidate(cleaned);
+            if (name) return name;
+        }
+
+        return '';
+    }
+
     function findStandaloneFullName(text) {
-        var blocked = /\b(chatbot|chatbots|servicio|servicios|producto|productos|informacion|info|interesado|interesada|quiero|necesito|necesitas|necesario|auditoria|presupuesto|telefono|email|mail|correo|empresa|automatizar|proceso|web|whatsapp|leads|soporte|captacion|enviado|enviar|recibido|falta|datos|solicitud|coordinar|hola|gracias|vale|si|no)\b/i;
+        var blocked = /\b(chatbot|chatbots|servicio|servicios|producto|productos|informacion|info|interesado|interesada|quiero|necesito|necesitas|necesario|auditoria|presupuesto|telefono|email|mail|correo|empresa|automatizar|proceso|web|pagina|página|whatsapp|leads|soporte|captacion|atencion|atención|cliente|clientes|funcion|función|funciones|objetivo|enviado|enviar|recibido|falta|datos|solicitud|coordinar|hola|gracias|vale|si|no)\b/i;
         var lines = text
             .split(/\n+/)
             .map(function(line) { return line.trim(); })
@@ -243,13 +266,19 @@
         for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
             if (line.indexOf('@') !== -1 || /\d/.test(line) || /[?¿!¡.,:;]/.test(line) || blocked.test(line)) continue;
-            var words = line.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g) || [];
-            if (words.length >= 2 && words.length <= 5 && words.join(' ').length >= 6) {
-                return words.join(' ');
-            }
+            var name = normalizeFullNameCandidate(line);
+            if (name) return name;
         }
 
         return '';
+    }
+
+    function normalizeFullNameCandidate(text) {
+        var words = String(text || '').match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g) || [];
+        if (words.length < 2 || words.length > 5) return '';
+        var name = words.join(' ');
+        if (name.length < 6) return '';
+        return name;
     }
 
     function hasFullName(name) {
