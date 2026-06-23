@@ -322,12 +322,74 @@
         saveChatHistory(history);
     }
 
+    function appendInlineFormattedText(parent, text) {
+        String(text || '').split(/(\*\*[^*]+\*\*)/g).forEach(function(part) {
+            if (!part) return;
+            if (part.indexOf('**') === 0 && part.lastIndexOf('**') === part.length - 2) {
+                var strong = document.createElement('strong');
+                strong.textContent = part.slice(2, -2);
+                parent.appendChild(strong);
+                return;
+            }
+            parent.appendChild(document.createTextNode(part.replace(/\*/g, '')));
+        });
+    }
+
+    function renderFormattedAssistantText(container, text) {
+        container.innerHTML = '';
+
+        var lines = String(text || '').split(/\n+/).map(function(line) {
+            return line.trim();
+        }).filter(Boolean);
+
+        if (!lines.length) return;
+
+        var list = null;
+        var listType = '';
+
+        function closeList() {
+            list = null;
+            listType = '';
+        }
+
+        lines.forEach(function(line) {
+            var numbered = line.match(/^\d+[.)]\s+(.+)$/);
+            var bullet = line.match(/^[-*]\s+(.+)$/);
+
+            if (numbered || bullet) {
+                var nextType = numbered ? 'ol' : 'ul';
+                if (!list || listType !== nextType) {
+                    list = document.createElement(nextType);
+                    listType = nextType;
+                    container.appendChild(list);
+                }
+                var item = document.createElement('li');
+                appendInlineFormattedText(item, numbered ? numbered[1] : bullet[1]);
+                list.appendChild(item);
+                return;
+            }
+
+            closeList();
+            var paragraph = document.createElement('p');
+            appendInlineFormattedText(paragraph, line);
+            container.appendChild(paragraph);
+        });
+    }
+
+    function setChatBubbleText(bubble, role, text) {
+        if (role === 'assistant') {
+            renderFormattedAssistantText(bubble, text);
+        } else {
+            bubble.textContent = text;
+        }
+    }
+
     function appendChatMessage(messages, role, text, options) {
         var bubble = document.createElement('div');
         bubble.className = 'chatbot__bubble chatbot__bubble--' + role;
         if (options && options.loading) bubble.classList.add('chatbot__bubble--loading');
         if (options && options.error) bubble.classList.add('chatbot__bubble--error');
-        bubble.textContent = text;
+        setChatBubbleText(bubble, role, text);
         messages.appendChild(bubble);
         messages.scrollTop = messages.scrollHeight;
         return bubble;
@@ -389,7 +451,7 @@
             .then(function(data) {
                 var answer = data.answer || data.message || 'He recibido tu mensaje, pero no he podido generar una respuesta completa.';
                 loading.classList.remove('chatbot__bubble--loading');
-                loading.textContent = answer;
+                setChatBubbleText(loading, 'assistant', answer);
                 history = readChatHistory();
                 history.push({ role: 'assistant', text: answer });
                 saveChatHistory(history);
@@ -402,7 +464,7 @@
                 var fallback = 'Estoy terminando de conectarme con la base de conocimiento. Mientras tanto, puedo orientarte mejor si me escribes a info@simplemations.com o pides la auditoria gratuita desde Contacto.';
                 loading.classList.remove('chatbot__bubble--loading');
                 loading.classList.add('chatbot__bubble--notice');
-                loading.textContent = fallback;
+                setChatBubbleText(loading, 'assistant', fallback);
                 history = readChatHistory();
                 history.push({ role: 'assistant', text: fallback });
                 saveChatHistory(history);

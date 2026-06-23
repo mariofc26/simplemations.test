@@ -1962,8 +1962,36 @@
 .chatbot__bubble {
     width: fit-content;
     max-width: 86%;
-    white-space: pre-line;
+    white-space: normal;
     overflow-wrap: anywhere;
+}
+
+.chatbot__bubble p {
+    margin: 0;
+}
+
+.chatbot__bubble p + p,
+.chatbot__bubble p + ul,
+.chatbot__bubble p + ol,
+.chatbot__bubble ul + p,
+.chatbot__bubble ol + p {
+    margin-top: 0.55rem;
+}
+
+.chatbot__bubble ul,
+.chatbot__bubble ol {
+    margin: 0.55rem 0 0 0;
+    padding-left: 1.15rem;
+}
+
+.chatbot__bubble li {
+    margin: 0.28rem 0;
+    padding-left: 0.1rem;
+}
+
+.chatbot__bubble strong {
+    color: var(--c-text);
+    font-weight: 800;
 }
 
 .chatbot__bubble--assistant {
