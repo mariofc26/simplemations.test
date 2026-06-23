@@ -174,6 +174,7 @@
     var CHATBOT_LEAD_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot-lead';
     var CHATBOT_STORAGE_KEY = 'simplemations-chat-history-v3';
     var CHATBOT_LEAD_STORAGE_KEY = 'simplemations-chat-leads-sent-v1';
+    var CHATBOT_AUDIT_PROMPT_KEY = 'simplemations-chat-audit-prompted-v1';
     var CHATBOT_SESSION_KEY = 'simplemations-chat-session-id';
     var CHATBOT_VISITOR_KEY = 'simplemations-visitor-id';
 
@@ -205,31 +206,88 @@
         }
     }
 
-    function shouldCaptureChatLead(message) {
-        return /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(message) ||
-            /(?:\+?\d[\d\s().-]{7,}\d)/.test(message) ||
-            /\b(auditor[ií]a|contactar|contacto|llamada|presupuesto|propuesta|automatizar|necesito ayuda|quiero hablar)\b/i.test(message);
+    function recentUserContext(history) {
+        return history
+            .filter(function(item) { return item.role === 'user'; })
+            .slice(-6)
+            .map(function(item) { return item.text; })
+            .join('\n')
+            .trim();
     }
 
-    function maybeSendChatLead(message) {
-        if (!CHATBOT_LEAD_WEBHOOK_URL || !shouldCaptureChatLead(message)) return;
+    function extractLeadDetails(text) {
+        var emailMatch = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+        var phoneMatch = text.match(/(?:\+?\d[\d\s().-]{7,}\d)/);
+
+        return {
+            email: emailMatch ? emailMatch[0].toLowerCase() : '',
+            phone: phoneMatch ? phoneMatch[0].replace(/\s+/g, ' ').trim() : ''
+        };
+    }
+
+    function hasUsefulBusinessContext(text) {
+        var cleaned = text
+            .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, '')
+            .replace(/(?:\+?\d[\d\s().-]{7,}\d)/g, '')
+            .trim();
+
+        return cleaned.length >= 70 ||
+            /\b(proceso|tarea|crm|whatsapp|email|formulario|factura|lead|cliente|ventas|reserva|documento|informe|chatbot|ia|administracion|soporte|seguimiento)\b/i.test(cleaned);
+    }
+
+    function shouldCaptureChatLead(history) {
+        var context = recentUserContext(history);
+        var details = extractLeadDetails(context);
+
+        return Boolean(details.email || details.phone) && hasUsefulBusinessContext(context);
+    }
+
+    function maybeSendChatLead(history) {
+        if (!CHATBOT_LEAD_WEBHOOK_URL || !shouldCaptureChatLead(history)) return Promise.resolve(false);
+
+        var context = recentUserContext(history);
+        var details = extractLeadDetails(context);
+        var contactKey = details.email || details.phone;
+        if (!contactKey) return Promise.resolve(false);
 
         var sent = readSentChatLeads();
-        var leadKey = message.toLowerCase().replace(/\s+/g, ' ').slice(0, 160);
-        if (sent[leadKey]) return;
-        sent[leadKey] = true;
-        localStorage.setItem(CHATBOT_LEAD_STORAGE_KEY, JSON.stringify(sent));
+        var leadKey = contactKey.toLowerCase();
+        if (sent[leadKey]) return Promise.resolve(false);
 
-        fetch(CHATBOT_LEAD_WEBHOOK_URL, {
+        return fetch(CHATBOT_LEAD_WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: message,
+                message: context,
+                email: details.email,
+                phone: details.phone,
+                conversation_context: context,
+                lead_stage: 'qualified_contact',
                 session_id: getStoredId(CHATBOT_SESSION_KEY, 'session'),
                 visitor_id: getStoredId(CHATBOT_VISITOR_KEY, 'visitor'),
                 source_url: window.location.href
             })
-        }).catch(function() {});
+        })
+            .then(function(response) {
+                if (!response.ok) return false;
+                sent[leadKey] = true;
+                localStorage.setItem(CHATBOT_LEAD_STORAGE_KEY, JSON.stringify(sent));
+                return true;
+            })
+            .catch(function() { return false; });
+    }
+
+    function maybeAskForAudit(messages, previousAnswer) {
+        if (localStorage.getItem(CHATBOT_AUDIT_PROMPT_KEY) === 'true') return;
+        if (previousAnswer && /auditor[ií]a gratuita/i.test(previousAnswer)) return;
+        localStorage.setItem(CHATBOT_AUDIT_PROMPT_KEY, 'true');
+
+        var text = 'Gracias, ya tengo suficiente contexto para trasladar tu caso. ¿Te gustaria que lo enfoquemos como una auditoria gratuita para revisar que automatizar primero?';
+        appendChatMessage(messages, 'assistant', text);
+
+        var history = readChatHistory();
+        history.push({ role: 'assistant', text: text });
+        saveChatHistory(history);
     }
 
     function appendChatMessage(messages, role, text, options) {
@@ -276,7 +334,7 @@
         history.push({ role: 'user', text: message });
         saveChatHistory(history);
         appendChatMessage(messages, 'user', message);
-        maybeSendChatLead(message);
+        var leadPromise = maybeSendChatLead(history);
         input.value = '';
 
         var loading = appendChatMessage(messages, 'assistant', 'Revisando la informacion...', { loading: true });
@@ -304,6 +362,9 @@
                 history.push({ role: 'assistant', text: answer });
                 saveChatHistory(history);
                 if (data.session_id) localStorage.setItem(CHATBOT_SESSION_KEY, data.session_id);
+                leadPromise.then(function(saved) {
+                    if (saved) maybeAskForAudit(messages, answer);
+                });
             })
             .catch(function() {
                 var fallback = 'Estoy terminando de conectarme con la base de conocimiento. Mientras tanto, puedo orientarte mejor si me escribes a info@simplemations.com o pides la auditoria gratuita desde Contacto.';
