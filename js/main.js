@@ -171,7 +171,9 @@
     }
 
     var CHATBOT_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot';
+    var CHATBOT_LEAD_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot-lead';
     var CHATBOT_STORAGE_KEY = 'simplemations-chat-history-v3';
+    var CHATBOT_LEAD_STORAGE_KEY = 'simplemations-chat-leads-sent-v1';
     var CHATBOT_SESSION_KEY = 'simplemations-chat-session-id';
     var CHATBOT_VISITOR_KEY = 'simplemations-visitor-id';
 
@@ -193,6 +195,41 @@
 
     function saveChatHistory(history) {
         localStorage.setItem(CHATBOT_STORAGE_KEY, JSON.stringify(history.slice(-20)));
+    }
+
+    function readSentChatLeads() {
+        try {
+            return JSON.parse(localStorage.getItem(CHATBOT_LEAD_STORAGE_KEY) || '{}');
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function shouldCaptureChatLead(message) {
+        return /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(message) ||
+            /(?:\+?\d[\d\s().-]{7,}\d)/.test(message) ||
+            /\b(auditor[ií]a|contactar|contacto|llamada|presupuesto|propuesta|automatizar|necesito ayuda|quiero hablar)\b/i.test(message);
+    }
+
+    function maybeSendChatLead(message) {
+        if (!CHATBOT_LEAD_WEBHOOK_URL || !shouldCaptureChatLead(message)) return;
+
+        var sent = readSentChatLeads();
+        var leadKey = message.toLowerCase().replace(/\s+/g, ' ').slice(0, 160);
+        if (sent[leadKey]) return;
+        sent[leadKey] = true;
+        localStorage.setItem(CHATBOT_LEAD_STORAGE_KEY, JSON.stringify(sent));
+
+        fetch(CHATBOT_LEAD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: message,
+                session_id: getStoredId(CHATBOT_SESSION_KEY, 'session'),
+                visitor_id: getStoredId(CHATBOT_VISITOR_KEY, 'visitor'),
+                source_url: window.location.href
+            })
+        }).catch(function() {});
     }
 
     function appendChatMessage(messages, role, text, options) {
@@ -239,6 +276,7 @@
         history.push({ role: 'user', text: message });
         saveChatHistory(history);
         appendChatMessage(messages, 'user', message);
+        maybeSendChatLead(message);
         input.value = '';
 
         var loading = appendChatMessage(messages, 'assistant', 'Revisando la informacion...', { loading: true });
