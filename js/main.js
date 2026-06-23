@@ -306,7 +306,7 @@
     }
 
     function maybeSendChatLead(history) {
-        if (!CHATBOT_LEAD_WEBHOOK_URL || !shouldCaptureChatLead(history)) return Promise.resolve(false);
+        if (!CHATBOT_LEAD_WEBHOOK_URL || !shouldCaptureChatLead(history)) return Promise.resolve({ stored: false });
 
         var context = recentUserContext(history);
         var details = extractLeadDetails(context);
@@ -315,7 +315,7 @@
 
         var sent = readSentChatLeads();
         var leadKey = contactKey.toLowerCase();
-        if (sent[leadKey]) return Promise.resolve(false);
+        if (sent[leadKey]) return Promise.resolve({ stored: false, duplicate: true });
 
         return fetch(CHATBOT_LEAD_WEBHOOK_URL, {
             method: 'POST',
@@ -334,12 +334,16 @@
             })
         })
             .then(function(response) {
-                if (!response.ok) return false;
+                if (!response.ok) return { stored: false };
+                return response.json().catch(function() { return { stored: false }; });
+            })
+            .then(function(result) {
+                if (!result || !result.stored) return result || { stored: false };
                 sent[leadKey] = true;
                 localStorage.setItem(CHATBOT_LEAD_STORAGE_KEY, JSON.stringify(sent));
-                return true;
+                return result;
             })
-            .catch(function() { return false; });
+            .catch(function() { return { stored: false }; });
     }
 
     function maybeAskForAudit(messages, previousAnswer) {
@@ -348,6 +352,20 @@
         localStorage.setItem(CHATBOT_AUDIT_PROMPT_KEY, 'true');
 
         var text = 'Gracias, ya tengo suficiente contexto para trasladar tu caso. ¿Te gustaria que lo enfoquemos como una auditoria gratuita para revisar que automatizar primero?';
+        appendChatMessage(messages, 'assistant', text);
+
+        var history = readChatHistory();
+        history.push({ role: 'assistant', text: text });
+        saveChatHistory(history);
+    }
+
+    function appendLeadConfirmation(messages, leadResult) {
+        if (!leadResult || !leadResult.stored) return;
+
+        var text = leadResult.email_sent === false
+            ? 'Gracias. Hemos recibido tus datos y los hemos pasado al equipo de Simplemations para revisar tu caso.\n\n- **Siguiente paso:** estudiaremos la solicitud y te contactaremos por los datos facilitados.\n- **Nota:** no he podido confirmar el envio automatico del correo, pero la solicitud queda registrada.'
+            : 'Gracias. Hemos recibido tus datos correctamente.\n\n- **Confirmacion:** te hemos enviado un correo de confirmacion.\n- **Siguiente paso:** pasamos tu caso al equipo de Simplemations para revisarlo.\n- **Tiempo estimado:** te contactaremos en las proximas 24 horas laborables.';
+
         appendChatMessage(messages, 'assistant', text);
 
         var history = readChatHistory();
@@ -493,8 +511,8 @@
                 history.push({ role: 'assistant', text: answer });
                 saveChatHistory(history);
                 if (data.session_id) localStorage.setItem(CHATBOT_SESSION_KEY, data.session_id);
-                leadPromise.then(function(saved) {
-                    if (saved) maybeAskForAudit(messages, answer);
+                leadPromise.then(function(result) {
+                    appendLeadConfirmation(messages, result);
                 });
             })
             .catch(function() {
