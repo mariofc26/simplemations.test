@@ -219,12 +219,33 @@
         var emailMatch = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
         var phoneMatch = text.match(/(?:\+?\d[\d\s().-]{7,}\d)/);
         var nameMatch = text.match(/(?:me llamo|mi nombre es|nombre(?: y apellidos)?\s*[:\-]?)\s+([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+){1,4})/i);
+        var fullName = nameMatch ? nameMatch[1].trim() : findStandaloneFullName(text);
 
         return {
             email: emailMatch ? emailMatch[0].toLowerCase() : '',
             phone: phoneMatch ? phoneMatch[0].replace(/\s+/g, ' ').trim() : '',
-            fullName: nameMatch ? nameMatch[1].trim() : ''
+            fullName: fullName
         };
+    }
+
+    function findStandaloneFullName(text) {
+        var blocked = /\b(chatbot|chatbots|servicio|servicios|producto|productos|informacion|info|interesado|interesada|quiero|necesito|auditoria|presupuesto|telefono|email|correo|empresa|automatizar|proceso|web|whatsapp|leads|soporte|captacion)\b/i;
+        var lines = text
+            .split(/\n+/)
+            .map(function(line) { return line.trim(); })
+            .filter(Boolean)
+            .reverse();
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (line.indexOf('@') !== -1 || /\d/.test(line) || blocked.test(line)) continue;
+            var words = line.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g) || [];
+            if (words.length >= 2 && words.length <= 5 && words.join(' ').length >= 6) {
+                return words.join(' ');
+            }
+        }
+
+        return '';
     }
 
     function hasFullName(name) {
