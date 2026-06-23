@@ -177,6 +177,11 @@
     var CHATBOT_AUDIT_PROMPT_KEY = 'simplemations-chat-audit-prompted-v1';
     var CHATBOT_SESSION_KEY = 'simplemations-chat-session-id';
     var CHATBOT_VISITOR_KEY = 'simplemations-visitor-id';
+    var chatRuntimeHistory = [];
+
+    try {
+        localStorage.removeItem(CHATBOT_STORAGE_KEY);
+    } catch (e) {}
 
     function getStoredId(key, prefix) {
         var existing = localStorage.getItem(key);
@@ -187,15 +192,11 @@
     }
 
     function readChatHistory() {
-        try {
-            return JSON.parse(localStorage.getItem(CHATBOT_STORAGE_KEY) || '[]');
-        } catch (e) {
-            return [];
-        }
+        return chatRuntimeHistory.slice();
     }
 
     function saveChatHistory(history) {
-        localStorage.setItem(CHATBOT_STORAGE_KEY, JSON.stringify(history.slice(-20)));
+        chatRuntimeHistory = history.slice(-20);
     }
 
     function readSentChatLeads() {
