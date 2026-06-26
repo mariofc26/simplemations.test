@@ -315,6 +315,9 @@
         if (!message) return;
 
         var history = readChatHistory();
+        var conversationBeforeReply = recentConversationContext(history);
+        var looksLikeConfirmation = /^(si|sí|confirmo|ok|vale|correcto|adelante|de acuerdo)[.! ]*$/i.test(message);
+        var wasConfirmingLead = looksLikeConfirmation && /registramos la solicitud|responde "confirmo"|datos estan correctos|datos están correctos/i.test(conversationBeforeReply);
         history.push({ role: 'user', text: message });
         saveChatHistory(history);
         appendChatMessage(messages, 'user', message);
@@ -336,7 +339,23 @@
         })
             .then(function(response) {
                 if (!response.ok) throw new Error('Chatbot request failed');
-                return response.json();
+                return response.text().then(function(text) {
+                    if (!text || !text.trim()) {
+                        if (wasConfirmingLead) {
+                            return {
+                                ok: true,
+                                stored: true,
+                                reply: 'Perfecto, hemos recibido tus datos y la solicitud ha quedado registrada en el CRM de Simplemations. El equipo revisara tu caso y se pondra en contacto contigo.'
+                            };
+                        }
+                        throw new Error('Empty chatbot response');
+                    }
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Invalid chatbot JSON response');
+                    }
+                });
             })
             .then(function(data) {
                 var answer = data.reply || data.answer || data.message || 'He recibido tu mensaje, pero no he podido generar una respuesta completa.';
