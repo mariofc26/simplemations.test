@@ -51,7 +51,7 @@
     function replacePageContent(nextDoc) {
         getReplaceableBodyChildren(document).forEach(function(el) { el.remove(); });
 
-        var script = document.querySelector('script[src="js/main.js"]');
+        var script = document.querySelector('script[src^="js/main.js"]');
         var fragment = document.createDocumentFragment();
         getReplaceableBodyChildren(nextDoc).forEach(function(el) {
             fragment.appendChild(document.importNode(el, true));
@@ -170,17 +170,16 @@
         });
     }
 
-    var CHATBOT_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot';
-    var CHATBOT_LEAD_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot-lead';
+    var CHATBOT_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot-crm-simple';
     var CHATBOT_STORAGE_KEY = 'simplemations-chat-history-v3';
-    var CHATBOT_LEAD_STORAGE_KEY = 'simplemations-chat-leads-sent-v1';
-    var CHATBOT_AUDIT_PROMPT_KEY = 'simplemations-chat-audit-prompted-v1';
     var CHATBOT_SESSION_KEY = 'simplemations-chat-session-id';
     var CHATBOT_VISITOR_KEY = 'simplemations-visitor-id';
     var chatRuntimeHistory = [];
 
     try {
         localStorage.removeItem(CHATBOT_STORAGE_KEY);
+        localStorage.removeItem('simplemations-chat-leads-sent-v1');
+        localStorage.removeItem('simplemations-chat-leads-sent-v2');
     } catch (e) {}
 
     function getStoredId(key, prefix) {
@@ -199,178 +198,14 @@
         chatRuntimeHistory = history.slice(-20);
     }
 
-    function readSentChatLeads() {
-        try {
-            return JSON.parse(localStorage.getItem(CHATBOT_LEAD_STORAGE_KEY) || '{}');
-        } catch (e) {
-            return {};
-        }
-    }
-
-    function recentUserContext(history) {
+    function recentConversationContext(history) {
         return history
-            .filter(function(item) { return item.role === 'user'; })
-            .slice(-6)
-            .map(function(item) { return item.text; })
+            .slice(-10)
+            .map(function(item) {
+                return (item.role === 'assistant' ? 'Asistente: ' : 'Usuario: ') + item.text;
+            })
             .join('\n')
             .trim();
-    }
-
-    function extractLeadDetails(text) {
-        var emailMatch = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
-        var phoneMatch = text.match(/(?:\+?\d[\d\s().-]{7,}\d)/);
-        var textWithoutContact = text
-            .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, ' ')
-            .replace(/(?:\+?\d[\d\s().-]{7,}\d)/g, ' ');
-        var nameMatch = textWithoutContact.match(/(?:me llamo|mi nombre es|nombre(?: y apellidos)?\s*[:\-]?)\s+([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+){1,4})/i);
-        var fullName = findContactLineFullName(text) || (nameMatch ? nameMatch[1].trim() : findStandaloneFullName(textWithoutContact));
-
-        return {
-            email: emailMatch ? emailMatch[0].toLowerCase() : '',
-            phone: phoneMatch ? phoneMatch[0].replace(/\s+/g, ' ').trim() : '',
-            fullName: fullName
-        };
-    }
-
-    function findContactLineFullName(text) {
-        var lines = text
-            .split(/\n+/)
-            .map(function(line) { return line.trim(); })
-            .filter(Boolean)
-            .reverse();
-
-        for (var i = 0; i < lines.length; i++) {
-            var line = lines[i];
-            if (line.indexOf('@') === -1 && !/(?:\+?\d[\d\s().-]{7,}\d)/.test(line)) continue;
-            var cleaned = line
-                .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, ' ')
-                .replace(/(?:\+?\d[\d\s().-]{7,}\d)/g, ' ')
-                .replace(/[,:;|()[\]{}]/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-            var name = normalizeFullNameCandidate(cleaned);
-            if (name) return name;
-        }
-
-        return '';
-    }
-
-    function findStandaloneFullName(text) {
-        var blocked = /\b(chatbot|chatbots|servicio|servicios|producto|productos|informacion|info|interesado|interesada|quiero|necesito|necesitas|necesario|auditoria|presupuesto|telefono|email|mail|correo|empresa|automatizar|proceso|web|pagina|página|whatsapp|leads|soporte|captacion|atencion|atención|cliente|clientes|funcion|función|funciones|objetivo|enviado|enviar|recibido|falta|datos|solicitud|coordinar|hola|gracias|vale|si|no)\b/i;
-        var lines = text
-            .split(/\n+/)
-            .map(function(line) { return line.trim(); })
-            .filter(Boolean)
-            .reverse();
-
-        for (var i = 0; i < lines.length; i++) {
-            var line = lines[i];
-            if (line.indexOf('@') !== -1 || /\d/.test(line) || /[?¿!¡.,:;]/.test(line) || blocked.test(line)) continue;
-            var name = normalizeFullNameCandidate(line);
-            if (name) return name;
-        }
-
-        return '';
-    }
-
-    function normalizeFullNameCandidate(text) {
-        var words = String(text || '').match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g) || [];
-        if (words.length < 2 || words.length > 5) return '';
-        var name = words.join(' ');
-        if (name.length < 6) return '';
-        return name;
-    }
-
-    function hasFullName(name) {
-        return name && name.split(/\s+/).filter(Boolean).length >= 2;
-    }
-
-    function hasUsefulBusinessContext(text) {
-        var cleaned = text
-            .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, '')
-            .replace(/(?:\+?\d[\d\s().-]{7,}\d)/g, '')
-            .trim();
-
-        return cleaned.length >= 70 ||
-            /\b(proceso|tarea|crm|whatsapp|email|formulario|factura|lead|cliente|ventas|reserva|documento|informe|chatbot|ia|administracion|soporte|seguimiento)\b/i.test(cleaned);
-    }
-
-    function shouldCaptureChatLead(history) {
-        var context = recentUserContext(history);
-        var details = extractLeadDetails(context);
-
-        return Boolean(details.email) &&
-            Boolean(details.phone) &&
-            hasFullName(details.fullName) &&
-            hasUsefulBusinessContext(context);
-    }
-
-    function maybeSendChatLead(history) {
-        if (!CHATBOT_LEAD_WEBHOOK_URL || !shouldCaptureChatLead(history)) return Promise.resolve({ stored: false });
-
-        var context = recentUserContext(history);
-        var details = extractLeadDetails(context);
-        var contactKey = getStoredId(CHATBOT_SESSION_KEY, 'session') + '|' + details.email + '|' + details.phone + '|' + details.fullName;
-        if (!contactKey) return Promise.resolve(false);
-
-        var sent = readSentChatLeads();
-        var leadKey = contactKey.toLowerCase();
-        if (sent[leadKey]) return Promise.resolve({ stored: false, duplicate: true });
-
-        return fetch(CHATBOT_LEAD_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message: context,
-                name: details.fullName,
-                full_name: details.fullName,
-                email: details.email,
-                phone: details.phone,
-                conversation_context: context,
-                lead_stage: 'complete_contact',
-                session_id: getStoredId(CHATBOT_SESSION_KEY, 'session'),
-                visitor_id: getStoredId(CHATBOT_VISITOR_KEY, 'visitor'),
-                source_url: window.location.href
-            })
-        })
-            .then(function(response) {
-                if (!response.ok) return { stored: false };
-                return response.json().catch(function() { return { stored: false }; });
-            })
-            .then(function(result) {
-                if (!result || !result.stored) return result || { stored: false };
-                sent[leadKey] = true;
-                localStorage.setItem(CHATBOT_LEAD_STORAGE_KEY, JSON.stringify(sent));
-                return result;
-            })
-            .catch(function() { return { stored: false }; });
-    }
-
-    function maybeAskForAudit(messages, previousAnswer) {
-        if (localStorage.getItem(CHATBOT_AUDIT_PROMPT_KEY) === 'true') return;
-        if (previousAnswer && /auditor[ií]a gratuita/i.test(previousAnswer)) return;
-        localStorage.setItem(CHATBOT_AUDIT_PROMPT_KEY, 'true');
-
-        var text = 'Gracias, ya tengo suficiente contexto para trasladar tu caso. ¿Te gustaria que lo enfoquemos como una auditoria gratuita para revisar que automatizar primero?';
-        appendChatMessage(messages, 'assistant', text);
-
-        var history = readChatHistory();
-        history.push({ role: 'assistant', text: text });
-        saveChatHistory(history);
-    }
-
-    function appendLeadConfirmation(messages, leadResult) {
-        if (!leadResult || !leadResult.stored) return;
-
-        var text = leadResult.email_sent === false
-            ? 'Gracias. Hemos recibido tus datos y los hemos pasado al equipo de Simplemations para revisar tu caso.\n\n- **Siguiente paso:** estudiaremos la solicitud y te contactaremos por los datos facilitados.\n- **Nota:** no he podido confirmar el envio automatico del correo, pero la solicitud queda registrada.'
-            : 'Gracias. Hemos recibido tus datos correctamente.\n\n- **Confirmacion:** te hemos enviado un correo de confirmacion.\n- **Siguiente paso:** pasamos tu caso al equipo de Simplemations para revisarlo.\n- **Tiempo estimado:** te contactaremos en las proximas 24 horas laborables.';
-
-        appendChatMessage(messages, 'assistant', text);
-
-        var history = readChatHistory();
-        history.push({ role: 'assistant', text: text });
-        saveChatHistory(history);
     }
 
     function appendInlineFormattedText(parent, text) {
@@ -483,7 +318,6 @@
         history.push({ role: 'user', text: message });
         saveChatHistory(history);
         appendChatMessage(messages, 'user', message);
-        var leadPromise = maybeSendChatLead(history);
         input.value = '';
 
         var loading = appendChatMessage(messages, 'assistant', 'Revisando la informacion...', { loading: true });
@@ -494,6 +328,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: message,
+                conversation_context: recentConversationContext(history),
                 session_id: getStoredId(CHATBOT_SESSION_KEY, 'session'),
                 visitor_id: getStoredId(CHATBOT_VISITOR_KEY, 'visitor'),
                 source_url: window.location.href
@@ -504,19 +339,16 @@
                 return response.json();
             })
             .then(function(data) {
-                var answer = data.answer || data.message || 'He recibido tu mensaje, pero no he podido generar una respuesta completa.';
+                var answer = data.reply || data.answer || data.message || 'He recibido tu mensaje, pero no he podido generar una respuesta completa.';
                 loading.classList.remove('chatbot__bubble--loading');
                 setChatBubbleText(loading, 'assistant', answer);
                 history = readChatHistory();
                 history.push({ role: 'assistant', text: answer });
                 saveChatHistory(history);
                 if (data.session_id) localStorage.setItem(CHATBOT_SESSION_KEY, data.session_id);
-                leadPromise.then(function(result) {
-                    appendLeadConfirmation(messages, result);
-                });
             })
             .catch(function() {
-                var fallback = 'Estoy terminando de conectarme con la base de conocimiento. Mientras tanto, puedo orientarte mejor si me escribes a info@simplemations.com o pides la auditoria gratuita desde Contacto.';
+                var fallback = 'Ahora mismo no he podido conectar con el asistente. Puedes intentarlo de nuevo en unos segundos o escribirnos a info@simplemations.com.';
                 loading.classList.remove('chatbot__bubble--loading');
                 loading.classList.add('chatbot__bubble--notice');
                 setChatBubbleText(loading, 'assistant', fallback);
