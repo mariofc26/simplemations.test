@@ -49,20 +49,26 @@
 
                 <div class="contact-body">
                     <div class="contact-main reveal reveal-d1">
-                        <form class="contact-form" action="https://mariofc26.app.n8n.cloud/webhook/simplemations-contacto" method="post" data-webhook-url="https://mariofc26.app.n8n.cloud/webhook/simplemations-contacto">
+                        <form class="contact-form" action="https://mariofc26.app.n8n.cloud/webhook/simplemations-formulario-contacto-intake" method="post" data-webhook-url="https://mariofc26.app.n8n.cloud/webhook/simplemations-formulario-contacto-intake">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label" for="name">Nombre</label>
-                                    <input id="name" name="name" type="text" class="form-input" placeholder="Tu nombre" autocomplete="name" required>
+                                    <label class="form-label" for="name">Nombre y apellidos</label>
+                                    <input id="name" name="name" type="text" class="form-input" placeholder="Nombre y apellidos" autocomplete="name" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="email">Email</label>
                                     <input id="email" name="email" type="email" class="form-input" placeholder="tu@empresa.com" autocomplete="email" required>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label" for="company">Empresa</label>
-                                <input id="company" name="company" type="text" class="form-input" placeholder="Nombre de tu empresa" autocomplete="organization">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Teléfono</label>
+                                    <input id="phone" name="phone" type="tel" class="form-input" placeholder="600 000 000" autocomplete="tel" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="company">Empresa</label>
+                                    <input id="company" name="company" type="text" class="form-input" placeholder="Nombre de tu empresa" autocomplete="organization">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="budget">Presupuesto estimado</label>
@@ -218,7 +224,7 @@
         </div>
     </div>
 
-    <script src="js/main.js?v=20260626-chatbot-crm-simple-2"></script>
+    <script src="js/main.js?v=20260701-modular-crm-1"></script>
     <!-- v4 -->
 </body>
 </html>

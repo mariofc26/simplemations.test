@@ -170,7 +170,7 @@
         });
     }
 
-    var CHATBOT_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot-crm-simple';
+    var CHATBOT_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot-intake';
     var CHATBOT_STORAGE_KEY = 'simplemations-chat-history-v3';
     var CHATBOT_SESSION_KEY = 'simplemations-chat-session-id';
     var CHATBOT_VISITOR_KEY = 'simplemations-visitor-id';
@@ -478,25 +478,37 @@
         }
         if (hint) hint.textContent = 'Estamos enviando tu solicitud...';
 
-        var payload = new URLSearchParams(new FormData(form));
-        payload.set('source_page', window.location.href);
+        var payload = {};
+        new FormData(form).forEach(function(value, key) {
+            payload[key] = value;
+        });
+        var budgetSelect = form.querySelector('[name="budget"]');
+        if (budgetSelect && budgetSelect.selectedIndex > -1 && budgetSelect.value) {
+            payload.budget = budgetSelect.options[budgetSelect.selectedIndex].text;
+        }
+        payload.source_url = window.location.href;
+        payload.source_page = window.location.href;
+        payload.consent = true;
 
         fetch(endpoint, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-            body: payload.toString()
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         })
             .then(function(response) {
                 if (!response.ok) throw new Error('Form submission failed');
-                return response.text();
+                return response.json().catch(function() { return {}; });
             })
-            .then(function() {
+            .then(function(data) {
+                if (data && data.stored === false) {
+                    throw new Error(data.reply || 'No se pudo guardar la solicitud');
+                }
                 showFormMessage(btn, hint, 'Solicitud enviada correctamente', true);
                 form.reset();
                 inputs.forEach(function(input) { input.classList.remove('valid', 'invalid'); });
             })
-            .catch(function() {
-                showFormMessage(btn, hint, 'No se pudo enviar. Escríbenos a info@simplemations.com.', false);
+            .catch(function(error) {
+                showFormMessage(btn, hint, error.message || 'No se pudo enviar. Escríbenos a info@simplemations.com.', false);
             })
             .finally(function() {
                 if (btn) {
@@ -538,6 +550,11 @@
             if (value === '') { input.classList.add('invalid'); input.classList.remove('valid'); return false; }
             var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
             input.classList.toggle('valid', emailOk); input.classList.toggle('invalid', !emailOk); return emailOk;
+        }
+        if (type === 'tel') {
+            if (value === '') { input.classList.add('invalid'); input.classList.remove('valid'); return false; }
+            var phoneOk = value.replace(/\D/g, '').length >= 9;
+            input.classList.toggle('valid', phoneOk); input.classList.toggle('invalid', !phoneOk); return phoneOk;
         }
         if (value === '') { input.classList.add('invalid'); input.classList.remove('valid'); return false; }
         input.classList.add('valid'); input.classList.remove('invalid'); return true;
