@@ -390,6 +390,43 @@ select.form-input {
     margin-top: var(--sp-sm);
 }
 
+.form-error {
+    margin-top: 0.4rem;
+    color: #b42318;
+    font-size: var(--fs-xs);
+    line-height: 1.35;
+}
+
+.form-error[hidden] {
+    display: none;
+}
+
+.form-actions-result {
+    margin-top: var(--sp-md);
+    display: flex;
+    justify-content: center;
+}
+
+.form-action-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.85rem 1.2rem;
+    border-radius: var(--r-md);
+    background: var(--c-primary);
+    color: #fff;
+    font-family: var(--f-display);
+    font-weight: var(--fw-semi);
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(43, 124, 229, 0.2);
+}
+
+.form-action-link:hover {
+    background: var(--c-primary-hover);
+    transform: translateY(-1px);
+}
+
 /* ═══════════════════════════════════════════════════
    SECTION HEADERS
    ═══════════════════════════════════════════════════ */

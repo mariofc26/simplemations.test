@@ -190,6 +190,70 @@
         return value;
     }
 
+    function cleanText(value) {
+        return String(value || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function normalizeText(value) {
+        return cleanText(value).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function normalizeEmail(value) {
+        return cleanText(value).toLowerCase();
+    }
+
+    function normalizePhone(value) {
+        var raw = cleanText(value);
+        var hasPlus = raw.charAt(0) === '+';
+        var digits = raw.replace(/\D/g, '');
+        return hasPlus ? '+' + digits : digits;
+    }
+
+    function hasEmailTypo(email) {
+        var domain = normalizeEmail(email).split('@')[1] || '';
+        var tld = domain.split('.').pop();
+        var badTlds = ['cmo', 'con', 'comm', 'cim', 'vom'];
+        var typoDomains = [
+            'gmail.cmo', 'gmail.con', 'gmail.comm', 'gamil.com', 'gmial.com', 'gmai.com',
+            'hotmail.cmo', 'hotmial.com', 'hotmai.com', 'outlok.com', 'outlook.cmo',
+            'icloud.cmo', 'yahoo.cmo'
+        ];
+        return badTlds.indexOf(tld) !== -1 || typoDomains.indexOf(domain) !== -1;
+    }
+
+    function isValidEmail(value) {
+        var email = normalizeEmail(value);
+        if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) return false;
+        if (hasEmailTypo(email)) return false;
+        var parts = email.split('@');
+        if (parts.length !== 2 || !parts[0] || !parts[1] || parts[1].indexOf('..') !== -1) return false;
+        return parts[1].split('.').every(function(label) {
+            return label && label.charAt(0) !== '-' && label.charAt(label.length - 1) !== '-';
+        });
+    }
+
+    function isValidPhone(value) {
+        var digits = cleanText(value).replace(/\D/g, '');
+        return digits.length >= 9 && digits.length <= 15;
+    }
+
+    function isValidContactName(value) {
+        var text = cleanText(value);
+        var norm = normalizeText(text);
+        if (text.length < 3) return false;
+        if (/@|https?:\/\/|\d{5,}/i.test(text)) return false;
+        if (/\b(chatbot|bot|automatiz|document|auditoria|presupuesto|empresa|servicio|quiero|necesito|busco|hola|confirmo|vale|ok)\b/i.test(norm)) return false;
+        var words = text.match(/[\p{L}]+/gu) || [];
+        return words.length >= 2 && words.length <= 8;
+    }
+
+    function isValidUseCase(value) {
+        var text = cleanText(value);
+        if (text.length < 15) return false;
+        if (/^[\p{L}\s]{1,25}$/u.test(text) && text.split(/\s+/).length <= 3) return false;
+        return true;
+    }
+
     function readChatHistory() {
         return chatRuntimeHistory.slice();
     }
@@ -270,12 +334,38 @@
         }
     }
 
+    function renderActionButtons(container, actions, onAction) {
+        if (!Array.isArray(actions) || !actions.length) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'chatbot__actions';
+        actions.forEach(function(action) {
+            if (!action || !action.label) return;
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'chatbot__action';
+            if (action.type === 'open_url') btn.classList.add('chatbot__action--primary');
+            btn.textContent = action.label;
+            btn.addEventListener('click', function() {
+                if (action.type === 'open_url' && action.url) {
+                    window.open(action.url, '_blank', 'noopener');
+                    return;
+                }
+                if (typeof onAction === 'function') onAction(action);
+            });
+            wrap.appendChild(btn);
+        });
+        if (wrap.children.length) container.appendChild(wrap);
+    }
+
     function appendChatMessage(messages, role, text, options) {
         var bubble = document.createElement('div');
         bubble.className = 'chatbot__bubble chatbot__bubble--' + role;
         if (options && options.loading) bubble.classList.add('chatbot__bubble--loading');
         if (options && options.error) bubble.classList.add('chatbot__bubble--error');
         setChatBubbleText(bubble, role, text);
+        if (options && options.actions) {
+            renderActionButtons(bubble, options.actions, options.onAction);
+        }
         messages.appendChild(bubble);
         if (messages.children.length > 1) {
             var root = messages.closest('.chatbot');
@@ -306,12 +396,12 @@
         if (status) status.textContent = busy ? 'Pensando...' : 'En linea';
     }
 
-    function sendChatMessage(root) {
+    function sendChatMessage(root, action) {
         var input = root.querySelector('.chatbot__input');
         var messages = root.querySelector('.chatbot__messages');
         if (!input || !messages) return;
 
-        var message = input.value.trim();
+        var message = action ? action.label : input.value.trim();
         if (!message) return;
 
         var history = readChatHistory();
@@ -329,6 +419,9 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: message,
+                action: action || null,
+                action_type: action ? action.type : '',
+                lead_draft: action && action.lead_draft ? action.lead_draft : null,
                 conversation_context: recentConversationContext(history),
                 session_id: getStoredId(CHATBOT_SESSION_KEY, 'session'),
                 visitor_id: getStoredId(CHATBOT_VISITOR_KEY, 'visitor'),
@@ -350,8 +443,16 @@
             })
             .then(function(data) {
                 var answer = data.reply || data.answer || data.message || 'He recibido tu mensaje, pero no he podido generar una respuesta completa.';
+                var actions = Array.isArray(data.actions) ? data.actions : [];
+                actions = actions.map(function(item) {
+                    if (item && !item.lead_draft && data.lead_draft) item.lead_draft = data.lead_draft;
+                    return item;
+                });
                 loading.classList.remove('chatbot__bubble--loading');
                 setChatBubbleText(loading, 'assistant', answer);
+                renderActionButtons(loading, actions, function(nextAction) {
+                    sendChatMessage(root, nextAction);
+                });
                 history = readChatHistory();
                 history.push({ role: 'assistant', text: answer });
                 saveChatHistory(history);
@@ -439,10 +540,7 @@
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                var allValid = true;
-                inputs.forEach(function(input) {
-                    if (!validateField(input)) allValid = false;
-                });
+                var allValid = validateForm(form, inputs);
                 if (!allValid) return;
 
                 var endpoint = form.getAttribute('data-webhook-url') || form.getAttribute('action');
@@ -471,12 +569,16 @@
 
         var payload = {};
         new FormData(form).forEach(function(value, key) {
-            payload[key] = value;
+            payload[key] = cleanText(value);
         });
+        if (payload.email) payload.email = normalizeEmail(payload.email);
+        if (payload.phone) payload.phone = normalizePhone(payload.phone);
         var budgetSelect = form.querySelector('[name="budget"]');
         if (budgetSelect && budgetSelect.selectedIndex > -1 && budgetSelect.value) {
             payload.budget = budgetSelect.options[budgetSelect.selectedIndex].text;
         }
+        payload.source = 'formulario_contacto';
+        payload.user_confirmed = true;
         payload.source_url = window.location.href;
         payload.source_page = window.location.href;
         payload.consent = true;
@@ -494,7 +596,8 @@
                 if (data && data.stored === false) {
                     throw new Error(data.reply || 'No se pudo guardar la solicitud');
                 }
-                showFormMessage(btn, hint, 'Solicitud enviada correctamente', true);
+                showFormMessage(btn, hint, 'Solicitud recibida', true);
+                renderFormActions(form, data);
                 form.reset();
                 inputs.forEach(function(input) { input.classList.remove('valid', 'invalid'); });
             })
@@ -517,38 +620,94 @@
             btn.textContent = message;
             btn.style.background = success ? '#10B981' : '#EF4444';
         }
-        if (hint) hint.textContent = success ? 'Gracias. Hemos recibido tus datos y te contactaremos en menos de 24h laborables.' : message;
+        if (hint) hint.textContent = success ? 'Gracias. Hemos recibido tus datos. Ahora puedes agendar una auditoria gratuita para que revisemos tu caso con mas detalle.' : message;
     }
+
+    function renderFormActions(form, data) {
+        var previous = form.querySelector('.form-actions-result');
+        if (previous) previous.remove();
+        var actions = Array.isArray(data && data.actions) ? data.actions : [];
+        if (data && data.cal_url && !actions.some(function(action) { return action && action.url === data.cal_url; })) {
+            actions.push({ type: 'open_url', label: 'Agendar auditoria gratuita', url: data.cal_url });
+        }
+        if (!actions.length) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'form-actions-result';
+        actions.forEach(function(action) {
+            if (!action || action.type !== 'open_url' || !action.url) return;
+            var link = document.createElement('a');
+            link.className = 'form-action-link';
+            link.href = action.url;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            link.textContent = action.label || 'Agendar auditoria gratuita';
+            wrap.appendChild(link);
+        });
+        if (wrap.children.length) form.appendChild(wrap);
+    }
+
+    function setFieldState(input, valid, message) {
+        input.classList.toggle('valid', valid);
+        input.classList.toggle('invalid', !valid);
+        var group = input.closest('.form-group') || input.parentElement;
+        if (!group) return valid;
+        var error = group.querySelector('.form-error');
+        if (!error) {
+            error = document.createElement('div');
+            error.className = 'form-error';
+            group.appendChild(error);
+        }
+        error.textContent = valid ? '' : message;
+        error.hidden = valid;
+        return valid;
+    }
+
+    function validateForm(form, inputs) {
+        var firstInvalid = null;
+        var allValid = true;
+        inputs.forEach(function(input) {
+            if (!validateField(input)) {
+                allValid = false;
+                if (!firstInvalid) firstInvalid = input;
+            }
+        });
+        if (!allValid) {
+            var btn = form.querySelector('.form-submit, button[type="submit"]');
+            var hint = form.querySelector('.form-hint');
+            showFormMessage(btn, hint, 'Revisa los campos marcados antes de enviar.', false);
+            if (firstInvalid) firstInvalid.focus();
+        }
+        return allValid;
+    }
+
     function validateField(input) {
         var tag = input.tagName.toLowerCase();
         var type = input.getAttribute('type');
         var value = input.value.trim();
+        var name = input.getAttribute('name') || input.id || '';
 
         if (tag === 'select') {
             if (value === '') { input.classList.remove('valid', 'invalid'); return true; }
             input.classList.add('valid'); input.classList.remove('invalid'); return true;
         }
         if (tag === 'textarea') {
-            if (value === '') { input.classList.remove('valid', 'invalid'); return true; }
-            input.classList.add('valid'); input.classList.remove('invalid'); return true;
+            return setFieldState(input, isValidUseCase(value), 'Cuentanos brevemente que quieres mejorar o automatizar.');
         }
         if (type === 'url') {
             if (value === '') { input.classList.remove('valid', 'invalid'); return true; }
             var urlOk = /^https?:\/\/.+\..+/.test(value);
-            input.classList.toggle('valid', urlOk); input.classList.toggle('invalid', !urlOk); return urlOk;
+            return setFieldState(input, urlOk, 'Indica una URL valida.');
         }
         if (type === 'email') {
-            if (value === '') { input.classList.add('invalid'); input.classList.remove('valid'); return false; }
-            var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            input.classList.toggle('valid', emailOk); input.classList.toggle('invalid', !emailOk); return emailOk;
+            return setFieldState(input, isValidEmail(value), 'Revisa el correo. Parece que hay una errata.');
         }
         if (type === 'tel') {
-            if (value === '') { input.classList.add('invalid'); input.classList.remove('valid'); return false; }
-            var phoneOk = value.replace(/\D/g, '').length >= 9;
-            input.classList.toggle('valid', phoneOk); input.classList.toggle('invalid', !phoneOk); return phoneOk;
+            return setFieldState(input, isValidPhone(value), 'Indica un telefono valido para poder coordinar la auditoria.');
         }
-        if (value === '') { input.classList.add('invalid'); input.classList.remove('valid'); return false; }
-        input.classList.add('valid'); input.classList.remove('invalid'); return true;
+        if (name === 'name') {
+            return setFieldState(input, isValidContactName(value), 'Indica tu nombre y apellidos para poder identificar la solicitud.');
+        }
+        return setFieldState(input, value !== '', 'Este campo es obligatorio.');
     }
 
     function initCookieBanner() {

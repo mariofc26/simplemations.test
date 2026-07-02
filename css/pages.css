@@ -2009,6 +2009,42 @@
     font-weight: 800;
 }
 
+.chatbot__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 0.85rem;
+}
+
+.chatbot__action {
+    min-height: 36px;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-sm);
+    background: var(--c-surface);
+    color: var(--c-text);
+    font: inherit;
+    font-weight: var(--fw-semi);
+    cursor: pointer;
+    transition: all var(--dur-fast) var(--ease);
+}
+
+.chatbot__action:hover {
+    border-color: var(--c-primary);
+    color: var(--c-primary);
+}
+
+.chatbot__action--primary {
+    border-color: var(--c-primary);
+    background: var(--c-primary);
+    color: #fff;
+}
+
+.chatbot__action--primary:hover {
+    background: var(--c-primary-hover);
+    color: #fff;
+}
+
 .chatbot__bubble--assistant {
     align-self: flex-start;
     background: var(--c-surface);
