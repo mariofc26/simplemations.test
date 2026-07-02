@@ -170,7 +170,7 @@
         });
     }
 
-    var CHATBOT_WEBHOOK_URL = 'https://mariofc26.app.n8n.cloud/webhook/simplemations-chatbot-intake';
+    var CHATBOT_WEBHOOK_URL = 'https://ymariotech.app.n8n.cloud/webhook/simplemations-chatbot-intake';
     var CHATBOT_STORAGE_KEY = 'simplemations-chat-history-v3';
     var CHATBOT_SESSION_KEY = 'simplemations-chat-session-id';
     var CHATBOT_VISITOR_KEY = 'simplemations-visitor-id';
